@@ -8,9 +8,9 @@ public interface IDAO {
 
   //  public boolean UpdateEntity(IEntity entity);
 
-   // public IEntity GetOneEntity(int id);
+     //public IEntity GetOneEntity(int id);
 
-  //  public IEntity GetOneEntity(IEntity entity);
+     //public IEntity GetOneEntity(IEntity entity);
 
    // public ArrayList<IEntity> GetEntitySet(IEntity entity);
 
