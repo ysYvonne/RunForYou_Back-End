@@ -1,7 +1,9 @@
 package db;
 
-import Bean.IEntity;
-import Bean.OrderStateBean;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+
+import Bean.*;
 
 public class OrderStateDAO implements IDAO{
 	
@@ -41,6 +43,93 @@ public class OrderStateDAO implements IDAO{
         	succ = false;
         }
 		return succ;
+	}
+
+	public ArrayList<String> getOrderIdListState(int state){
+		ArrayList<String> orderIdList = null;
+		//OrderStateBean orderState = null;
+		String orderId = null;
+		if(state==0){
+			String sqlQuery = "select * from Order_State where state=0";
+			try{
+				ResultSet res;
+				res = sql.executeQuery(sqlQuery);
+				
+				while(res.next()){
+					orderId = res.getString("order_id");
+					orderIdList = new ArrayList<String>();
+					orderIdList.add(orderId);
+				}	
+				
+				sql.closeConnect();
+				return orderIdList;
+				
+			}catch(Exception e){
+				return null;
+			}
+		}
+		
+		sql.closeConnect();
+		return null;
+		
+	}
+
+	public ArrayList<String> GetOrderIdListClient(int clientId){
+		
+		ArrayList<String> orderIdList = null;
+		//OrderStateBean orderState = null;
+		String orderId = null;
+		
+		if(clientId!=0){
+			String sqlQuery = "Select * from Order_State where client_id="+clientId;
+			try{
+				ResultSet res;
+				res = sql.executeQuery(sqlQuery);
+				
+				while(res.next()){
+					orderId = res.getString("order_id");
+					orderIdList = new ArrayList<String>();
+					orderIdList.add(orderId);			
+				}
+				
+				sql.closeConnect();
+				return orderIdList;
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}
+		
+		sql.closeConnect();
+		return null;
+	}
+
+    public ArrayList<String> GetOrderIdListDelivery(int deliveryId){
+		
+    	ArrayList<String> orderIdList = null;
+		//OrderStateBean orderState = null;
+		String orderId = null;
+		
+		if(deliveryId!=0){
+			String sqlQuery = "Select * from Order_State where delivery_id="+deliveryId;
+			try{
+				ResultSet res;
+				res = sql.executeQuery(sqlQuery);
+				
+				while(res.next()){
+					orderId = res.getString("order_id");
+					orderIdList = new ArrayList<String>();
+					orderIdList.add(orderId);			
+				}
+				
+				sql.closeConnect();
+				return orderIdList;
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}
+		
+		sql.closeConnect();
+		return null;
 	}
 
 }

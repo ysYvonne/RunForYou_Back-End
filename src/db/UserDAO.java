@@ -68,6 +68,7 @@ public class UserDAO implements IDAO{
     		try{
                 ResultSet res;
                 res = sql.executeQuery(sqlQuery);
+                
                 if(res.next()){
                 	user = new UserBean();
                 	int userId = Integer.parseInt(res.getString("user_Id"));
@@ -86,12 +87,12 @@ public class UserDAO implements IDAO{
                 sql.closeConnect();
                 return user;
     	    }catch(Exception e){
-    	    	return null;
+    	    	e.printStackTrace();
     	    }
-    	}else{
+    	}
     		sql.closeConnect();
     		return null;
-    	}   		
+    	  		
 		  	
     }
     

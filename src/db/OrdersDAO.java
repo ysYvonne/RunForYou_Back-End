@@ -51,4 +51,41 @@ public class OrdersDAO implements IDAO{
 		
 		return succ;
 	} 
+
+	public IEntity GetOneEntity(int orderId){
+		OrdersBean order = null;
+		
+		if(orderId!=0){
+			String sqlQuery = "select * from Orders where order_id="+orderId;
+			try{
+				ResultSet res;
+				res = sql.executeQuery(sqlQuery);
+				
+				if(res.next()){
+					order = new OrdersBean();
+					int id = Integer.parseInt(res.getString("order_Id"));
+					order.setOrderId(id);
+					int type =Integer.parseInt(res.getString("order_type"));
+					order.setOrderType(type);
+					order.setOrderAddress(res.getString("order_address"));
+					order.setOrderDestination(res.getString("order_destination"));
+					order.setOrderTime(res.getString("order_time"));
+					order.setOrderItem(res.getString("order_item"));
+					order.setOrderDescribe(res.getString("order_describe"));
+					float reward = Float.parseFloat(res.getString("order_reward"));
+					order.setOrderReward(reward);
+					float predict = Float.parseFloat(res.getString("order_predict"));
+					order.setOrderPredict(predict);
+				}
+				
+				sql.closeConnect();
+				return order;
+			}catch(Exception e){
+				e.printStackTrace();
+			}			
+		}
+		sql.closeConnect();
+		return null;
+		
+	}
 }
