@@ -30,7 +30,7 @@ public class OrderStateDAO implements IDAO{
         			                                            +orderState.getOverTime()+","
         			                                            +orderState.getStartTime()+","
         			                                            +orderState.getArriveTime()+","
-        			                                            +orderState.getGetTime()+")";
+        			                                            +orderState.getGetTime()+");";
         	
         	int rs = sql.executeUpdate(sqlInsert);
         	if(rs!=0){
@@ -45,19 +45,19 @@ public class OrderStateDAO implements IDAO{
 		return succ;
 	}
 
-	public ArrayList<String> getOrderIdListState(int state){
-		ArrayList<String> orderIdList = null;
+	public ArrayList<Integer> getOrderIdListState(int state){
+		ArrayList<Integer> orderIdList = null;
 		//OrderStateBean orderState = null;
-		String orderId = null;
+		int orderId = 0;
 		if(state==0){
-			String sqlQuery = "select * from Order_State where state=0";
+			String sqlQuery = "select * from Order_State where state=0;";
 			try{
 				ResultSet res;
 				res = sql.executeQuery(sqlQuery);
 				
 				while(res.next()){
-					orderId = res.getString("order_id");
-					orderIdList = new ArrayList<String>();
+					orderId = res.getInt("order_id");
+					orderIdList = new ArrayList<Integer>();
 					orderIdList.add(orderId);
 				}	
 				
@@ -65,30 +65,30 @@ public class OrderStateDAO implements IDAO{
 				return orderIdList;
 				
 			}catch(Exception e){
-				return null;
+				e.printStackTrace();
 			}
 		}
 		
 		sql.closeConnect();
-		return null;
+		return orderIdList;
 		
 	}
 
-	public ArrayList<String> GetOrderIdListClient(int clientId){
+	public ArrayList<Integer> GetOrderIdListClient(int clientId){
 		
-		ArrayList<String> orderIdList = null;
+		ArrayList<Integer> orderIdList = null;
 		//OrderStateBean orderState = null;
-		String orderId = null;
+		int orderId = 0;
 		
 		if(clientId!=0){
-			String sqlQuery = "Select * from Order_State where client_id="+clientId;
+			String sqlQuery = "Select * from Order_State where client_id="+clientId+";";
 			try{
 				ResultSet res;
 				res = sql.executeQuery(sqlQuery);
 				
 				while(res.next()){
-					orderId = res.getString("order_id");
-					orderIdList = new ArrayList<String>();
+					orderId = res.getInt("order_id");
+					orderIdList = new ArrayList<Integer>();
 					orderIdList.add(orderId);			
 				}
 				
@@ -100,24 +100,24 @@ public class OrderStateDAO implements IDAO{
 		}
 		
 		sql.closeConnect();
-		return null;
+		return orderIdList;
 	}
 
-    public ArrayList<String> GetOrderIdListDelivery(int deliveryId){
+    public ArrayList<Integer> GetOrderIdListDelivery(int deliveryId){
 		
-    	ArrayList<String> orderIdList = null;
+    	ArrayList<Integer> orderIdList = null;
 		//OrderStateBean orderState = null;
-		String orderId = null;
+		int orderId = 0;
 		
 		if(deliveryId!=0){
-			String sqlQuery = "Select * from Order_State where delivery_id="+deliveryId;
+			String sqlQuery = "Select * from Order_State where delivery_id="+deliveryId+";";
 			try{
 				ResultSet res;
 				res = sql.executeQuery(sqlQuery);
 				
 				while(res.next()){
-					orderId = res.getString("order_id");
-					orderIdList = new ArrayList<String>();
+					orderId = res.getInt("order_id");
+					orderIdList = new ArrayList<Integer>();
 					orderIdList.add(orderId);			
 				}
 				
@@ -129,7 +129,76 @@ public class OrderStateDAO implements IDAO{
 		}
 		
 		sql.closeConnect();
-		return null;
+		return orderIdList;
 	}
 
+	public int getEntityNumber(){
+		
+		int total = 0;
+		try{
+			String sqlQuery = "Select count(*) from Order_State;";
+			ResultSet res;
+			res = sql.executeQuery(sqlQuery);
+			if(res.next()){
+				total = res.getInt(1);
+			}
+			
+			return total;
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		return total;
+	}
+	
+	public boolean UpdateState(String orderId,int state){
+		boolean succ=true;
+		 
+		if(orderId!=null){			 
+			String sqlUpdate = "update Order_State set state ="+state+" where order_id="+orderId+";";
+			try{		 		 			 
+				int rs = sql.executeUpdate(sqlUpdate);
+					
+				if(rs!=0){
+	        		sql.closeConnect();
+	        		succ = true;
+	        	}
+	        	sql.closeConnect();
+	        	succ = false;
+			 }catch(Exception e){
+				 succ = false;
+			 }
+		 }
+		
+		return succ;
+	}
+	
+    public ArrayList<Integer> GetOrders(int num,int index,int state){
+    	ArrayList<Integer> orderIdList = null;
+    	int orderId = 0;
+    	
+    	if((num>0)&&(index>0)){
+    		String sqlQuery = "Select * from Order_State where state="+state+ " and order_id<"+ index +" desc limit "+num+";";
+    		try{
+				ResultSet res;
+				res = sql.executeQuery(sqlQuery);
+				
+				while(res.next()){
+					orderId = res.getInt("order_id");
+					orderIdList = new ArrayList<Integer>();
+					orderIdList.add(orderId);
+				}
+				
+				sql.closeConnect();
+				return orderIdList;
+    			
+    		}catch(Exception e){
+    			e.printStackTrace();
+    		}
+    	}
+    	
+    	sql.closeConnect();
+    	return orderIdList;
+    }
 }

@@ -6,8 +6,7 @@ import Bean.*;
 public class UserDAO implements IDAO{
 	
 	private DBManager sql;
-    private int recordNum=0;
-    private int pageNum=0;
+	private int recordNum=0;
     
 
     public UserDAO(){
@@ -22,7 +21,7 @@ public class UserDAO implements IDAO{
 
         // 获取Sql查询语句
         try{
-            String sqlGetNum="select COUNT(user_id) from User";
+            String sqlGetNum="select COUNT(user_id) from User;";
             ResultSet res;
             res = sql.executeQuery(sqlGetNum);
             if(res.next()){
@@ -37,7 +36,7 @@ public class UserDAO implements IDAO{
                                                        "','"+user.getPhoneNum()+
                                                        "','"+user.getEmail()+
                                                        "','"+user.getSchool()+
-                                                       "','"+user.getPassword()+"') ";
+                                                       "','"+user.getPassword()+"); ";
             //String Sql = "insert into Credit values(1,2,3,4,5)";
             // 操作DB对象
             int rs = sql.executeUpdate(Sql);
@@ -59,12 +58,36 @@ public class UserDAO implements IDAO{
         return succ;
     }
 
+    public boolean UpdateEntity(int userId,String column,String value){
+    	boolean succ = true;
+    	
+    	if(userId!=0&&column!=null&&value!=null){
+    		String sqlUpdate = "update User set "+column+"="+value+" where user_id="+userId+";";
+    		
+    		try{		 		 			 
+				int rs = sql.executeUpdate(sqlUpdate);
+					
+				if(rs!=0){
+	        		sql.closeConnect();
+	        		succ = true;
+	        	}
+	        	sql.closeConnect();
+	        	succ = false;
+			 }catch(Exception e){
+				 succ = false;
+			 }
+		 }
+		
+		return succ;
+    	
+    }
+    
     public IEntity GetOneEntityPhone(String phone){
     	  	
     	UserBean user = null;
     	
     	if(phone!=null){
-    		String sqlQuery ="select * from User where phoneNum="+phone;
+    		String sqlQuery ="select * from User where phoneNum="+phone+";";
     		try{
                 ResultSet res;
                 res = sql.executeQuery(sqlQuery);
@@ -101,7 +124,7 @@ public class UserDAO implements IDAO{
     	UserBean user = null;
     	
     	if(email!=null){
-    		String sqlQuery ="select * from User where email="+email;
+    		String sqlQuery ="select * from User where email="+email+";";
     		try{
                 ResultSet res;
                 res = sql.executeQuery(sqlQuery);

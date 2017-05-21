@@ -24,7 +24,7 @@ public class CreditDAO implements IDAO {
         	String sqlInsert = "insert into Credit(user_id,order_num,delivery_num,credit) values("+credit.getUserId()+","
         			                                       +credit.getOrderNum()+","
         			                                       +credit.getDeliveryNum()+","
-        			                                       +credit.getCredit()+")";
+        			                                       +credit.getCredit()+");";
         	
         	int rs = sql.executeUpdate(sqlInsert);
         	if(rs!=0){

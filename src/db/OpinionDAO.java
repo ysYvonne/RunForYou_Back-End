@@ -23,7 +23,7 @@ public class OpinionDAO implements IDAO {
         	String sqlInsert = "insert into Opinion(user_id,opinion_time,content) values("
                                                             +opinion.getUserId()+","
         			                                        +opinion.getOpinionTime()+","
-        			                                        +opinion.getContent()+")";
+        			                                        +opinion.getContent()+");";
         	
         	int rs = sql.executeUpdate(sqlInsert);
         	if(rs!=0){

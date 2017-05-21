@@ -19,7 +19,7 @@ public class OrdersDAO implements IDAO{
 		OrdersBean order=(OrdersBean)entity;
 		
 		try{
-			String sqlGetNum="select count(*) from Orders";
+			String sqlGetNum="select count(*) from Orders;";
 			ResultSet res;
 			res = sql.executeQuery(sqlGetNum);
 			if(res.next()){
@@ -35,7 +35,7 @@ public class OrdersDAO implements IDAO{
 			                                               +order.getOrderItem()+","
 			                                               +order.getOrderDescribe()+","
 			                                               +order.getOrderReward()+","
-			                                               +order.getOrderPredict()+")";
+			                                               +order.getOrderPredict()+");";
 			//²Ù×÷DB¶ÔÏó
 			int rs = sql.executeUpdate(sqlInsert);
 			if(rs!=0){
@@ -56,7 +56,7 @@ public class OrdersDAO implements IDAO{
 		OrdersBean order = null;
 		
 		if(orderId!=0){
-			String sqlQuery = "select * from Orders where order_id="+orderId;
+			String sqlQuery = "select * from Orders where order_id="+orderId+";";
 			try{
 				ResultSet res;
 				res = sql.executeQuery(sqlQuery);
@@ -88,4 +88,5 @@ public class OrdersDAO implements IDAO{
 		return null;
 		
 	}
+		
 }

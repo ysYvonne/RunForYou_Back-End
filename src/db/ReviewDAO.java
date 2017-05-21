@@ -23,7 +23,7 @@ public class ReviewDAO implements IDAO {
         	String sqlInsert = "insert into Order_Review(order_id,review_type,review_time) values("
                                                            + review.getOrderId()+","
         			                                       + review.getReviewType()+","
-        			                                       + review.getReviewTime()+")";
+        			                                       + review.getReviewTime()+");";
         	int rs = sql.executeUpdate(sqlInsert);
         	if(rs!=0){
         		sql.closeConnect();
