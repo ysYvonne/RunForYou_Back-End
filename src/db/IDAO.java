@@ -2,7 +2,7 @@ package db;
 import Bean.*;
 
 public interface IDAO {
-	public boolean AddEntity(IEntity entity);
+	//public boolean AddEntity(IEntity entity);
 
     //public boolean DeleteEntity(IEntity entity);
 

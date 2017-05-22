@@ -1,7 +1,7 @@
 package Bean;
 
 public class OrdersBean implements IEntity{
-	 private int order_id;//订单id
+	    private int order_id;//订单id
 	    private int order_type;//订单类型，记1为积分，2为金钱
 	    private String order_address;//送货地址
 	    private String order_destination;//取货地址

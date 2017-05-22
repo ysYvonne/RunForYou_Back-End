@@ -39,4 +39,66 @@ public class CreditDAO implements IDAO {
 		return succ;
 	}
 
+	public boolean UpdateEntityOrder(int userId,int value){
+		boolean succ = false;
+		
+		if(userId>0){
+			String sqlUpdate = "update Credit set order_num = order_num + "+ value+" where user_id ="+userId+";";
+			try{
+				int rs = sql.executeUpdate(sqlUpdate);
+				
+				if(rs!=0){
+	        		sql.closeConnect();
+	        		succ = true;
+	        	}
+	        	sql.closeConnect();
+	        	
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}
+		return succ;
+	}
+	
+	public boolean UpdateEntityDelivery(int userId,int value){
+		boolean succ = false;
+		
+		if(userId>0){
+			String sqlUpdate = "update Credit set delivery_num = delivery_num + "+ value+" where user_id ="+userId+";";
+			try{
+				int rs = sql.executeUpdate(sqlUpdate);
+				
+				if(rs!=0){
+	        		sql.closeConnect();
+	        		succ = true;
+	        	}
+	        	sql.closeConnect();
+	        	
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}
+		return succ;
+	}
+	
+	public boolean UpdateEntityCredit(int userId,int value){
+		boolean succ = false;
+		
+		if(userId>0){
+			String sqlUpdate = "update Credit set credit = credit + "+ value+" where user_id ="+userId+";";
+			try{
+				int rs = sql.executeUpdate(sqlUpdate);
+				
+				if(rs!=0){
+	        		sql.closeConnect();
+	        		succ = true;
+	        	}
+	        	sql.closeConnect();
+	        	
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}
+		return succ;
+	}
 }

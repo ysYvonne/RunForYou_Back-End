@@ -45,35 +45,39 @@ public class OrderStateDAO implements IDAO{
 		return succ;
 	}
 
-	public ArrayList<Integer> getOrderIdListState(int state){
-		ArrayList<Integer> orderIdList = null;
-		//OrderStateBean orderState = null;
-		int orderId = 0;
-		if(state==0){
-			String sqlQuery = "select * from Order_State where state=0;";
+	public IEntity GetOneEntity(int orderId){
+		OrderStateBean orderstate = null;
+		
+		if(orderId!=0){
+			String sqlQuery = "select * from Order_State where order_id="+orderId+";";
 			try{
 				ResultSet res;
 				res = sql.executeQuery(sqlQuery);
 				
-				while(res.next()){
-					orderId = res.getInt("order_id");
-					orderIdList = new ArrayList<Integer>();
-					orderIdList.add(orderId);
-				}	
+				if(res.next()){
+					orderstate = new OrderStateBean();
+					orderstate.setOrderStateId(res.getInt("order_state_id"));
+					orderstate.setOrderId(res.getInt("order_id"));
+					orderstate.setClientId(res.getInt("client_id"));
+					orderstate.setDeliveryId(res.getInt("delivery_id"));
+					orderstate.setGetTime(res.getString("get_time"));
+					orderstate.setArriveTime(res.getString("arrive_time"));
+					orderstate.setStartTime(res.getString("start_time"));
+					orderstate.setOverTime(res.getString("over_time"));
+					orderstate.setState(res.getInt("state"));
+				}
 				
 				sql.closeConnect();
-				return orderIdList;
-				
+				return orderstate;
 			}catch(Exception e){
 				e.printStackTrace();
-			}
+			}			
 		}
-		
 		sql.closeConnect();
-		return orderIdList;
+		return null;
 		
 	}
-
+	
 	public ArrayList<Integer> GetOrderIdListClient(int clientId){
 		
 		ArrayList<Integer> orderIdList = null;

@@ -13,7 +13,7 @@ public class OrdersDAO implements IDAO{
         sql.openConnect();
     }
 
-	public boolean AddEntity(IEntity entity) {
+	public int AddEntity(IEntity entity) {
 		// TODO Auto-generated method stub
 		boolean succ=true;
 		OrdersBean order=(OrdersBean)entity;
@@ -48,8 +48,9 @@ public class OrdersDAO implements IDAO{
 		}catch(Exception e){
 			succ = false;
 		}
-		
-		return succ;
+		if(succ)
+			return recordNum+1;
+		return -1;
 	} 
 
 	public IEntity GetOneEntity(int orderId){
@@ -63,19 +64,15 @@ public class OrdersDAO implements IDAO{
 				
 				if(res.next()){
 					order = new OrdersBean();
-					int id = Integer.parseInt(res.getString("order_Id"));
-					order.setOrderId(id);
-					int type =Integer.parseInt(res.getString("order_type"));
-					order.setOrderType(type);
+					order.setOrderId(res.getInt("order_id"));
+					order.setOrderType(res.getInt("order_type"));
 					order.setOrderAddress(res.getString("order_address"));
 					order.setOrderDestination(res.getString("order_destination"));
 					order.setOrderTime(res.getString("order_time"));
 					order.setOrderItem(res.getString("order_item"));
 					order.setOrderDescribe(res.getString("order_describe"));
-					float reward = Float.parseFloat(res.getString("order_reward"));
-					order.setOrderReward(reward);
-					float predict = Float.parseFloat(res.getString("order_predict"));
-					order.setOrderPredict(predict);
+					order.setOrderReward(res.getFloat("order_reward"));
+					order.setOrderPredict(res.getFloat("order_predict"));
 				}
 				
 				sql.closeConnect();

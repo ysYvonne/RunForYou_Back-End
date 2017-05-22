@@ -55,14 +55,23 @@ public class UserDAO implements IDAO{
             //return false;
         }
        // return false;
+        
         return succ;
+        
     }
 
     public boolean UpdateEntity(int userId,String column,String value){
     	boolean succ = true;
     	
     	if(userId!=0&&column!=null&&value!=null){
-    		String sqlUpdate = "update User set "+column+"="+value+" where user_id="+userId+";";
+    		int value1;
+    		String sqlUpdate;
+    		if(column.equals("sex")||column.equals("age")){
+    			value1 = Integer.parseInt(value);
+    			sqlUpdate = "update User set "+column+"="+value1+" where user_id="+userId+";";
+    		}
+    		else
+    		 sqlUpdate = "update User set "+column+"='"+value+"' where user_id="+userId+";";
     		
     		try{		 		 			 
 				int rs = sql.executeUpdate(sqlUpdate);
@@ -94,13 +103,10 @@ public class UserDAO implements IDAO{
                 
                 if(res.next()){
                 	user = new UserBean();
-                	int userId = Integer.parseInt(res.getString("user_Id"));
-                	user.setUserId(userId);               	
+                	user.setUserId(res.getInt("user_id"));               	
                 	user.setName(res.getString("name"));
-                	int sex =  Integer.parseInt(res.getString("sex"));
-                	user.setSex(sex);
-                	int age = Integer.parseInt(res.getString("age"));
-                	user.setAge(age);
+                	user.setSex(res.getInt("sex"));
+                	user.setAge(res.getInt("age"));
                 	user.setNickname(res.getString("nickname"));
                 	user.setPhoneNum(phone);		
                 	user.setEmail(res.getString("email"));
@@ -130,13 +136,10 @@ public class UserDAO implements IDAO{
                 res = sql.executeQuery(sqlQuery);
                 if(res.next()){
                 	user = new UserBean();
-                	int userId = Integer.parseInt(res.getString("user_Id"));
-                	user.setUserId(userId);               	
+                	user.setUserId(res.getInt("user_id"));               	
                 	user.setName(res.getString("name"));
-                	int sex =  Integer.parseInt(res.getString("sex"));
-                	user.setSex(sex);
-                	int age = Integer.parseInt(res.getString("age"));
-                	user.setAge(age);
+                	user.setSex(res.getInt("sex"));
+                	user.setAge(res.getInt("age"));
                 	user.setNickname(res.getString("nickname"));              	
                 	user.setPhoneNum(res.getString("phoneNum"));		
                 	user.setEmail(res.getString("email"));
@@ -153,4 +156,34 @@ public class UserDAO implements IDAO{
 	
     }
 
+    public IEntity GetOneEntityId(int userId){
+    	
+    	UserBean user = null;
+    	
+    	if(userId>0){
+    		String sqlQuery ="select * from User where user_id="+userId+";";
+    		try{
+                ResultSet res;
+                res = sql.executeQuery(sqlQuery);
+                if(res.next()){
+                	user = new UserBean();
+                	user.setUserId(res.getInt("user_id"));               	
+                	user.setName(res.getString("name"));
+                	user.setSex(res.getInt("sex"));
+                	user.setAge(res.getInt("age"));
+                	user.setNickname(res.getString("nickname"));              	
+                	user.setPhoneNum(res.getString("phoneNum"));		
+                	user.setEmail(res.getString("email"));
+                	user.setSchool(res.getString("school"));
+                	user.setPassword(res.getString("password"));
+                }
+                sql.closeConnect();
+    	    }catch(Exception e){
+    	    }
+    	}
+    	sql.closeConnect();
+    	
+    	return user;
+	
+    }
 }
