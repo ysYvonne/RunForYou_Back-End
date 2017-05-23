@@ -86,14 +86,14 @@ public class CreditDAO extends DBManager implements IDAO {
 		return succ;
 	}
 	
-	public boolean UpdateEntityCredit(int userId,int value){
+	public boolean UpdateEntityCredit(int userId,float value){
 		boolean succ = false;
 		
 		if(userId>0){
 			String sqlUpdate = "update Credit set credit = (credit + ?) where user_id =?;";
 			try{
 				preStmt = (PreparedStatement) conn.prepareStatement(sqlUpdate);		
-				preStmt.setInt(1, value);
+				preStmt.setFloat(1, value);
 				preStmt.setInt(2, userId);
 				if(preStmt.executeUpdate(sqlUpdate)!=0){
 	        		succ = true;

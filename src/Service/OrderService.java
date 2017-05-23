@@ -19,7 +19,7 @@ public class OrderService {
 		int totalnum = orderStateDao.getEntityNumber();
 		ArrayList<Integer> orderIdList = orderStateDao.GetOrders(15, totalnum, 0);
 		ArrayList<LittleOrderBean> orderList = new ArrayList<LittleOrderBean>();
-		for(int i = 0;i<15;i++)
+		for(int i = 0;i<orderIdList.size();i++)
 		{
 			OrdersBean order = (OrdersBean)ordersDao.GetOneEntity(orderIdList.get(i));
 			OrderStateBean orderState = (OrderStateBean)orderStateDao.GetOneEntity(orderIdList.get(i));
@@ -38,7 +38,7 @@ public class OrderService {
 
 		ArrayList<Integer> orderIdList = orderStateDao.GetOrders(15, index, 0);
 		ArrayList<LittleOrderBean> orderList = new ArrayList<LittleOrderBean>();
-		for(int i = 0;i<15;i++)
+		for(int i = 0;i<orderIdList.size();i++)
 		{
 			OrdersBean order = (OrdersBean)ordersDao.GetOneEntity(orderIdList.get(i));
 			OrderStateBean orderState = (OrderStateBean)orderStateDao.GetOneEntity(orderIdList.get(i));
@@ -84,5 +84,124 @@ public class OrderService {
 	public OrderStateBean getOrderState(int orderId){
 		return (OrderStateBean)orderStateDao.GetOneEntity(orderId);
 	}
+	public boolean acceptOrder(int userId,int orderId){
+		boolean succ = false;
+		succ = orderStateDao.acceptOrder(orderId, userId);
+		return succ;
+	}
+	public ArrayList<LittleOrderBean> loadMyOrders(int userId){
+		int totalnum = orderStateDao.getIdOrderNum(userId, "client");
+		ArrayList<Integer> orderIdList = orderStateDao.GetOrderIdListClient(15, totalnum, userId);
+		ArrayList<LittleOrderBean> orderList = new ArrayList<LittleOrderBean>();
+		for(int i = 0;i<orderIdList.size();i++)
+		{
+			OrdersBean order = (OrdersBean)ordersDao.GetOneEntity(orderIdList.get(i));
+			OrderStateBean orderState = (OrderStateBean)orderStateDao.GetOneEntity(orderIdList.get(i));
+			LittleOrderBean littleOrder = new LittleOrderBean();
+			littleOrder.setOrderId(order.getOrderId());
+			littleOrder.setOrderItem(order.getOrderItem());
+			littleOrder.setOrderReward(order.getOrderReward());
+			littleOrder.setOrderAddress(order.getOrderAddress());
+			littleOrder.setStartTime(orderState.getStartTime());
+			littleOrder.setState(orderState.getState());
+			orderList.add(littleOrder);
+		}
+		return orderList;
+	}
+	public  ArrayList<LittleOrderBean> loadMoreMyOrders(int index,int userId){
+
+		ArrayList<Integer> orderIdList = orderStateDao.GetOrderIdListClient(15, index, userId);
+		ArrayList<LittleOrderBean> orderList = new ArrayList<LittleOrderBean>();
+		for(int i = 0;i<orderIdList.size();i++)
+		{
+			OrdersBean order = (OrdersBean)ordersDao.GetOneEntity(orderIdList.get(i));
+			OrderStateBean orderState = (OrderStateBean)orderStateDao.GetOneEntity(orderIdList.get(i));
+			LittleOrderBean littleOrder = new LittleOrderBean();
+			littleOrder.setOrderId(order.getOrderId());
+			littleOrder.setOrderItem(order.getOrderItem());
+			littleOrder.setOrderReward(order.getOrderReward());
+			littleOrder.setOrderAddress(order.getOrderAddress());
+			littleOrder.setStartTime(orderState.getStartTime());
+			littleOrder.setState(orderState.getState());
+			orderList.add(littleOrder);
+		}
+		return orderList;
+	}
+	public ArrayList<LittleOrderBean> loadMyDeliveryOrders(int userId){
+		int totalnum = orderStateDao.getIdOrderNum(userId, "Delivery");
+		ArrayList<Integer> orderIdList = orderStateDao.GetOrderIdListDelivery(15, totalnum, userId);
+		ArrayList<LittleOrderBean> orderList = new ArrayList<LittleOrderBean>();
+		for(int i = 0;i<orderIdList.size();i++)
+		{
+			OrdersBean order = (OrdersBean)ordersDao.GetOneEntity(orderIdList.get(i));
+			OrderStateBean orderState = (OrderStateBean)orderStateDao.GetOneEntity(orderIdList.get(i));
+			LittleOrderBean littleOrder = new LittleOrderBean();
+			littleOrder.setOrderId(order.getOrderId());
+			littleOrder.setOrderItem(order.getOrderItem());
+			littleOrder.setOrderReward(order.getOrderReward());
+			littleOrder.setOrderAddress(order.getOrderAddress());
+			littleOrder.setStartTime(orderState.getStartTime());
+			littleOrder.setState(orderState.getState());
+			orderList.add(littleOrder);
+		}
+		return orderList;
+	}
+	public  ArrayList<LittleOrderBean> loadMoreMyDeliveryOrders(int index,int userId){
+
+		ArrayList<Integer> orderIdList = orderStateDao.GetOrderIdListDelivery(15, index, userId);
+		ArrayList<LittleOrderBean> orderList = new ArrayList<LittleOrderBean>();
+		for(int i = 0;i<orderIdList.size();i++)
+		{
+			OrdersBean order = (OrdersBean)ordersDao.GetOneEntity(orderIdList.get(i));
+			OrderStateBean orderState = (OrderStateBean)orderStateDao.GetOneEntity(orderIdList.get(i));
+			LittleOrderBean littleOrder = new LittleOrderBean();
+			littleOrder.setOrderId(order.getOrderId());
+			littleOrder.setOrderItem(order.getOrderItem());
+			littleOrder.setOrderReward(order.getOrderReward());
+			littleOrder.setOrderAddress(order.getOrderAddress());
+			littleOrder.setStartTime(orderState.getStartTime());
+			littleOrder.setState(orderState.getState());
+			orderList.add(littleOrder);
+		}
+		return orderList;
+	}
 	
+	public boolean updateState(int orderId,int state){
+		
+		boolean succ = false;
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		succ = orderStateDao.UpdateState(orderId, state, df.format(new Date()));
+		if(state == 4){//当订单完成时 根据积分订单加分
+			CreditDAO creditDao = new CreditDAO();
+			OrdersBean order = (OrdersBean)ordersDao.GetOneEntity(orderId);
+			OrderStateBean orderState = (OrderStateBean)orderStateDao.GetOneEntity(orderId);
+			if(order.getOrderType() == 1)
+				succ = creditDao.UpdateEntityCredit(orderState.getDeliveryId(), order.getOrderReward());
+			succ = creditDao.UpdateEntityDelivery(orderState.getDeliveryId(), 1);
+			succ = creditDao.UpdateEntityOrder(orderState.getClientId(), 1);
+		}
+		return succ;
+	}
+	public boolean placeReview(int orderId,int reviewType){
+		boolean succ = false;
+		succ = orderStateDao.UpdateState(orderId, 5, null);//设置状态
+		//插入review
+		ReviewBean review = new ReviewBean();
+		review.setOrderId(orderId);
+		review.setReviewType(reviewType);
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		review.setReviewTime(df.format(new Date()));
+		ReviewDAO reviewDao = new ReviewDAO();
+		reviewDao.AddEntity(review);
+		//根据评价等级加分
+		CreditDAO creditDao = new CreditDAO();
+		if(reviewType<=2)
+			succ = creditDao.UpdateEntityCredit(orderId, 1);
+		else if(reviewType>2&&reviewType<=4)
+			succ = creditDao.UpdateEntityCredit(orderId, 2);
+		else
+			succ = creditDao.UpdateEntityCredit(orderId, 3);
+		
+		return succ;
+	}
 }

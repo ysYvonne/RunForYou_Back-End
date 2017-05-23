@@ -167,22 +167,43 @@ public class OrderStateDAO extends DBManager implements IDAO{
 		return total;
 	}
 	
-	public boolean UpdateState(String orderId,int state,String time){
+	public boolean acceptOrder(int orderId,int userId){
+		boolean succ=false;
+		
+		if(orderId>0){
+			String sqlUpdate = "update Order_State set state =1";
+			try{
+				
+					sqlUpdate += ",delivery_id="+userId+" where order_id="+orderId+";";
+	
+				if(sta.executeUpdate(sqlUpdate)!=0){
+	        		succ = true;
+	        	}
+
+			 }catch(Exception e){
+				 e.printStackTrace();
+			 }finally{
+				 super.closeConnect();
+			 }
+		 }
+		
+		return succ;
+	}
+	
+	public boolean UpdateState(int orderId,int state,String time){
 		boolean succ=false;
 		 
-		if(orderId!=null){
+		if(orderId>0){
 			String sqlUpdate = "update Order_State set state ="+state;
 			try{
 				if(state==-1){
-					sqlUpdate += ",over_time="+time+" where order_id="+orderId+";";
-				}else if(state==1){
-					sqlUpdate += " where order_id="+orderId+";";
+					sqlUpdate += ",over_time='"+time+"' where order_id="+orderId+";";
 				}else if(state==2){
-					sqlUpdate += ",get_time="+time+" where order_id="+orderId+";";
+					sqlUpdate += ",get_time='"+time+"' where order_id="+orderId+";";
 				}else if(state==3){
-					sqlUpdate += ",arrive_time="+time+" where order_id="+orderId+";";
+					sqlUpdate += ",arrive_time='"+time+"' where order_id="+orderId+";";
 				}else if(state==4){
-					sqlUpdate += ",over_time="+time+" where order_id="+orderId+";";
+					sqlUpdate += ",over_time='"+time+"' where order_id="+orderId+";";
 				}else if(state==5){
 					sqlUpdate += " where order_id="+orderId+";";
 				}
