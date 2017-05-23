@@ -107,4 +107,30 @@ public class CreditDAO extends DBManager implements IDAO {
 		}
 		return succ;
 	}
+
+	public IEntity GetOneEntityId(int userId){
+		  CreditBean credit = null;
+		  if(userId>0){
+			  String sqlQuery ="select * from Credit where user_id=?;";
+		   		try{
+	    			preStmt=(PreparedStatement) conn.prepareStatement(sqlQuery);
+	    			preStmt.setInt(1, userId);
+	                ResultSet res;
+	                res = preStmt.executeQuery(sqlQuery);
+	                if(res.next()){
+	                	credit = new CreditBean();
+	                	credit.setUserId(res.getInt("user_id"));
+	                	credit.setOrderNum(res.getInt("order_num"));
+	                	credit.setDeliveryNum(res.getInt("delivery_num"));
+	                	credit.setCredit(res.getInt("credit")); 	                	
+	                }
+	    	    }catch(Exception e){
+	    	    	e.printStackTrace();
+	    	    }finally {
+	    			super.closeConnect();
+	    		}
+		  }
+		  
+		  return credit;
+	}
 }
