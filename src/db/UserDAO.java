@@ -1,67 +1,62 @@
 package db;
 import java.sql.ResultSet;
 
+import com.mysql.jdbc.PreparedStatement;
+
 import Bean.*;
 
-public class UserDAO implements IDAO{
+public class UserDAO extends DBManager implements IDAO{
 	
-	private DBManager sql;
+	//private DBManager sql;
 	private int recordNum=0;
     
 
     public UserDAO(){
-        sql = new DBManager();
-        sql.openConnect();
+        super.openConnect();
     }
     
     public boolean AddEntity(IEntity entity) {
 
-        boolean succ=true;
+        boolean succ=false;
         UserBean user=(UserBean)entity;
 
         // 获取Sql查询语句
         try{
-            String sqlGetNum="select COUNT(user_id) from User;";
+            String sqlGetNum="select COUNT(*) from User;";
             ResultSet res;
-            res = sql.executeQuery(sqlGetNum);
+            res = sta.executeQuery(sqlGetNum);
             if(res.next()){
                 this.recordNum=res.getInt(1);
             }else
                 this.recordNum = 0;
-            String Sql = "insert into User values("+(recordNum+1)+
-                                                       ",'"+ user.getName()+
-                                                       "',"+user.getSex()+
-                                                       ","+user.getAge()+
-                                                       ",'"+user.getNickname()+
-                                                       "','"+user.getPhoneNum()+
-                                                       "','"+user.getEmail()+
-                                                       "','"+user.getSchool()+
-                                                       "','"+user.getPassword()+"); ";
+            String sqlInsert = "insert into User values(?,?,?,?,?,?,?,?,?);";
+            preStmt=(PreparedStatement) conn.prepareStatement(sqlInsert);
+            preStmt.setInt(1, recordNum+1);
+            preStmt.setString(2, user.getName());
+            preStmt.setInt(3,user.getSex());
+            preStmt.setInt(4,user.getAge());
+            preStmt.setString(5,user.getNickname());
+            preStmt.setString(6,user.getPhoneNum());
+            preStmt.setString(7,user.getEmail());
+            preStmt.setString(8,user.getSchool());
+            preStmt.setString(9,user.getPassword());
             //String Sql = "insert into Credit values(1,2,3,4,5)";
-            // 操作DB对象
-            int rs = sql.executeUpdate(Sql);
-            if (rs != 0) {
-                sql.closeConnect();
+            
+            if (preStmt.executeUpdate()!=0) {
                 succ = true;
-                //return true;
             }
-            sql.closeConnect();
-            succ = false;
-            //return false;
 
         }catch (Exception e) {
-            succ=false;
-            //e.printStackTrace();
-            //return false;
-        }
-       // return false;
-        
-        return succ;
-        
+            e.printStackTrace();
+        }finally {
+			super.closeConnect();
+		}
+            
+        return succ;        
     }
 
     public boolean UpdateEntity(int userId,String column,String value){
-    	boolean succ = true;
+    	boolean succ = false;
     	
     	if(userId!=0&&column!=null&&value!=null){
     		int value1;
@@ -74,21 +69,19 @@ public class UserDAO implements IDAO{
     		 sqlUpdate = "update User set "+column+"='"+value+"' where user_id="+userId+";";
     		
     		try{		 		 			 
-				int rs = sql.executeUpdate(sqlUpdate);
 					
-				if(rs!=0){
-	        		sql.closeConnect();
+				if(sta.executeUpdate(sqlUpdate)!=0){
 	        		succ = true;
 	        	}
-	        	sql.closeConnect();
-	        	succ = false;
+
 			 }catch(Exception e){
-				 succ = false;
-			 }
+				 e.printStackTrace();
+			 }finally {
+    			super.closeConnect();
+    		}
 		 }
 		
-		return succ;
-    	
+		return succ;    	
     }
     
     public IEntity GetOneEntityPhone(String phone){
@@ -96,10 +89,12 @@ public class UserDAO implements IDAO{
     	UserBean user = null;
     	
     	if(phone!=null){
-    		String sqlQuery ="select * from User where phoneNum="+phone+";";
+    		String sqlQuery ="select * from User where phoneNum=?;";
     		try{
+    			preStmt=(PreparedStatement) conn.prepareStatement(sqlQuery);
+    			preStmt.setString(1, phone);
                 ResultSet res;
-                res = sql.executeQuery(sqlQuery);
+                res = preStmt.executeQuery(sqlQuery);
                 
                 if(res.next()){
                 	user = new UserBean();
@@ -113,14 +108,14 @@ public class UserDAO implements IDAO{
                 	user.setSchool(res.getString("school"));
                 	user.setPassword(res.getString("password"));
                 }
-                sql.closeConnect();
-                return user;
+                
     	    }catch(Exception e){
     	    	e.printStackTrace();
-    	    }
+    	    }finally {
+    			super.closeConnect();
+    		}
     	}
-    		sql.closeConnect();
-    		return null;
+    		return user;
     	  		
 		  	
     }
@@ -130,10 +125,12 @@ public class UserDAO implements IDAO{
     	UserBean user = null;
     	
     	if(email!=null){
-    		String sqlQuery ="select * from User where email="+email+";";
+    		String sqlQuery ="select * from User where email=?;";
     		try{
+    			preStmt=(PreparedStatement) conn.prepareStatement(sqlQuery);
+    			preStmt.setString(1, email);
                 ResultSet res;
-                res = sql.executeQuery(sqlQuery);
+                res = preStmt.executeQuery(sqlQuery);
                 if(res.next()){
                 	user = new UserBean();
                 	user.setUserId(res.getInt("user_id"));               	
@@ -146,12 +143,13 @@ public class UserDAO implements IDAO{
                 	user.setSchool(res.getString("school"));
                 	user.setPassword(res.getString("password"));
                 }
-                sql.closeConnect();
     	    }catch(Exception e){
-    	    }
+    	    	e.printStackTrace();
+    	    }finally {
+    			super.closeConnect();
+    		}
     	}
-    	sql.closeConnect();
-    	
+  	
     	return user;
 	
     }
@@ -161,10 +159,12 @@ public class UserDAO implements IDAO{
     	UserBean user = null;
     	
     	if(userId>0){
-    		String sqlQuery ="select * from User where user_id="+userId+";";
+    		String sqlQuery ="select * from User where user_id=?;";
     		try{
+    			preStmt=(PreparedStatement) conn.prepareStatement(sqlQuery);
+    			preStmt.setInt(1, userId);
                 ResultSet res;
-                res = sql.executeQuery(sqlQuery);
+                res = preStmt.executeQuery(sqlQuery);
                 if(res.next()){
                 	user = new UserBean();
                 	user.setUserId(res.getInt("user_id"));               	
@@ -177,13 +177,13 @@ public class UserDAO implements IDAO{
                 	user.setSchool(res.getString("school"));
                 	user.setPassword(res.getString("password"));
                 }
-                sql.closeConnect();
     	    }catch(Exception e){
-    	    }
+    	    	e.printStackTrace();
+    	    }finally {
+    			super.closeConnect();
+    		}
     	}
-    	sql.closeConnect();
-    	
-    	return user;
-	
+
+    	return user;	
     }
 }

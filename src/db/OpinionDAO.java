@@ -1,39 +1,40 @@
 package db;
 
+import com.mysql.jdbc.PreparedStatement;
+
 import Bean.*;
 
-public class OpinionDAO implements IDAO {
+public class OpinionDAO extends DBManager implements IDAO {
 
-	private DBManager sql;
+	//private DBManager sql;
     private int recordNum=0;
     private int pageNum=0;
     
 	public OpinionDAO() {
 		// TODO Auto-generated constructor stub
-        sql = new DBManager();
-        sql.openConnect();
+        super.openConnect();
 	}
 
 	public boolean AddEntity(IEntity entity) {
 		// TODO Auto-generated method stub
-        boolean succ=true;
+        boolean succ=false;
         OpinionBean opinion = (OpinionBean)entity;
         
         try{
-        	String sqlInsert = "insert into Opinion(user_id,opinion_time,content) values("
-                                                            +opinion.getUserId()+","
-        			                                        +opinion.getOpinionTime()+","
-        			                                        +opinion.getContent()+");";
-        	
-        	int rs = sql.executeUpdate(sqlInsert);
-        	if(rs!=0){
-        		sql.closeConnect();
+        	String sqlInsert = "insert into Opinion values(null,?,?,?);";
+        	preStmt = (PreparedStatement) conn.prepareStatement(sqlInsert);
+        	preStmt.setInt(1, opinion.getUserId());
+        	preStmt.setString(2, opinion.getOpinionTime());
+        	preStmt.setString(3, opinion.getContent());
+
+        	if(preStmt.executeUpdate(sqlInsert)!=0){
         		succ = true;
         	}
-        	sql.closeConnect();
         	succ = false;
         }catch(Exception e){
         	succ = false;
+        }finally{
+        	super.closeConnect();
         }
 		return succ;
 	}

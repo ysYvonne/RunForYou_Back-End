@@ -1,55 +1,57 @@
 package db;
 import java.sql.ResultSet;
 
+import com.mysql.jdbc.PreparedStatement;
+
 import Bean.*;
 
-public class OrdersDAO implements IDAO{
-	private DBManager sql;
+public class OrdersDAO extends DBManager implements IDAO{
+	//private DBManager sql;
     private int recordNum=0;
     private int pageNum=0;
     
     public OrdersDAO(){
-        sql = new DBManager();
-        sql.openConnect();
+        super.openConnect();
     }
 
 	public int AddEntity(IEntity entity) {
 		// TODO Auto-generated method stub
-		boolean succ=true;
+		boolean succ=false;
 		OrdersBean order=(OrdersBean)entity;
 		
 		try{
 			String sqlGetNum="select count(*) from Orders;";
 			ResultSet res;
-			res = sql.executeQuery(sqlGetNum);
+			res = sta.executeQuery(sqlGetNum);
 			if(res.next()){
 				this.recordNum=res.getInt(1);
 			}else
 				this.recordNum = 0;
 			
-			String sqlInsert = "insert into Orders values("+(recordNum+1)+","
-			                                               +order.getOrderType()+","
-			                                               +order.getOrderAddress()+","
-			                                               +order.getOrderDestination()+","
-			                                               +order.getOrderTime()+","
-			                                               +order.getOrderItem()+","
-			                                               +order.getOrderDescribe()+","
-			                                               +order.getOrderReward()+","
-			                                               +order.getOrderPredict()+");";
-			//²Ù×÷DB¶ÔÏó
-			int rs = sql.executeUpdate(sqlInsert);
-			if(rs!=0){
-				sql.closeConnect();
+			String sqlInsert = "insert into Orders values(?,?,?,?,?,?,?,?,?);";
+            preStmt=(PreparedStatement) conn.prepareStatement(sqlInsert);
+            preStmt.setInt(1, recordNum+1);
+            preStmt.setInt(2, order.getOrderType());
+            preStmt.setString(3, order.getOrderAddress());
+            preStmt.setString(4,order.getOrderDestination());
+            preStmt.setString(5, order.getOrderTime());
+            preStmt.setString(6, order.getOrderItem());
+            preStmt.setString(7, order.getOrderDescribe());
+            preStmt.setFloat(8, order.getOrderReward());
+            preStmt.setFloat(9, order.getOrderPredict());
+
+			if(preStmt.executeUpdate(sqlInsert)!=0){
 				succ = true;
-			}
-			sql.closeConnect();
-			succ = false;
-			
+			}	
 		}catch(Exception e){
-			succ = false;
+			e.printStackTrace();
+		}finally{
+			super.closeConnect();
 		}
+		
 		if(succ)
 			return recordNum+1;
+		
 		return -1;
 	} 
 
@@ -57,10 +59,12 @@ public class OrdersDAO implements IDAO{
 		OrdersBean order = null;
 		
 		if(orderId!=0){
-			String sqlQuery = "select * from Orders where order_id="+orderId+";";
+			String sqlQuery = "select * from Orders where order_id=?;";
 			try{
+				preStmt=(PreparedStatement) conn.prepareStatement(sqlQuery);
+				preStmt.setInt(1, orderId);
 				ResultSet res;
-				res = sql.executeQuery(sqlQuery);
+				res = preStmt.executeQuery(sqlQuery);
 				
 				if(res.next()){
 					order = new OrdersBean();
@@ -74,16 +78,13 @@ public class OrdersDAO implements IDAO{
 					order.setOrderReward(res.getFloat("order_reward"));
 					order.setOrderPredict(res.getFloat("order_predict"));
 				}
-				
-				sql.closeConnect();
-				return order;
 			}catch(Exception e){
 				e.printStackTrace();
-			}			
+			}finally{
+				super.closeConnect();
+			}
 		}
-		sql.closeConnect();
-		return null;
+		return order;
 		
-	}
-		
+	}		
 }

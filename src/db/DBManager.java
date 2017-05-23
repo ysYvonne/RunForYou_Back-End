@@ -1,13 +1,15 @@
 package db;
 
 import java.sql.*;
+
+import com.mysql.jdbc.PreparedStatement;
 public class DBManager {
-	private Connection conn;
+	protected Connection conn;
     private String url = "jdbc:mysql://112.74.124.48:3306/RunForYou"; // 指定连接数据库的URL
     private String user = "user"; // 指定连接数据库的用户名
     private String password = "123456"; // 指定连接数据库的密码
-
-    private Statement sta;
+    protected PreparedStatement preStmt=null;
+    protected Statement sta=null;
     private ResultSet rs;
     
     // 打开数据库连接
@@ -16,6 +18,7 @@ public class DBManager {
             // 加载数据库驱动
             Class.forName("com.mysql.jdbc.Driver");
             conn =DriverManager.getConnection(url, user, password);// 创建数据库连接
+            sta=conn.createStatement();
             if (conn != null) {
                 System.out.println("数据库连接成功"); // 连接成功的提示信息
             }else
@@ -36,6 +39,9 @@ public class DBManager {
             }
             if (conn != null) {
                 conn.close();
+            }
+            if(preStmt!=null) {
+            	preStmt.close();
             }
             System.out.println("关闭数据库连接成功");
         } catch (SQLException e) {
