@@ -6,9 +6,8 @@ import com.mysql.jdbc.PreparedStatement;
 import Bean.*;
 
 public class OrdersDAO extends DBManager implements IDAO{
-	//private DBManager sql;
+
     private int recordNum=0;
-    private int pageNum=0;
     
     public OrdersDAO(){
         super.openConnect();
@@ -40,7 +39,7 @@ public class OrdersDAO extends DBManager implements IDAO{
             preStmt.setFloat(8, order.getOrderReward());
             preStmt.setFloat(9, order.getOrderPredict());
 
-			if(preStmt.executeUpdate(sqlInsert)!=0){
+			if(preStmt.executeUpdate()!=0){
 				succ = true;
 			}	
 		}catch(Exception e){
@@ -64,7 +63,7 @@ public class OrdersDAO extends DBManager implements IDAO{
 				preStmt=(PreparedStatement) conn.prepareStatement(sqlQuery);
 				preStmt.setInt(1, orderId);
 				ResultSet res;
-				res = preStmt.executeQuery(sqlQuery);
+				res = preStmt.executeQuery();
 				
 				if(res.next()){
 					order = new OrdersBean();

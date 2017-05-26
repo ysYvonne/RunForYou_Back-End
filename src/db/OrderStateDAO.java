@@ -8,10 +8,6 @@ import com.mysql.jdbc.PreparedStatement;
 import Bean.*;
 
 public class OrderStateDAO extends DBManager implements IDAO{
-	
-	//private DBManager sql;
-    private int recordNum=0;
-    private int pageNum=0;
     
     public OrderStateDAO(){
     	super.openConnect();
@@ -23,6 +19,7 @@ public class OrderStateDAO extends DBManager implements IDAO{
         OrderStateBean orderState=(OrderStateBean)entity;
         
         try{
+        	
         	String sqlInsert = "insert into Order_State values(null,?,?,?,?,?,?,?,?);";
         	 preStmt=(PreparedStatement) conn.prepareStatement(sqlInsert);
         	 preStmt.setInt(1, orderState.getOrderId());
@@ -33,6 +30,7 @@ public class OrderStateDAO extends DBManager implements IDAO{
         	 preStmt.setString(6,orderState.getStartTime());
         	 preStmt.setString(7,orderState.getArriveTime());
         	 preStmt.setString(8,orderState.getGetTime());
+        	 System.out.println(preStmt.asSql());
         	if(preStmt.executeUpdate()!=0){
         		succ = true;
         	}
@@ -54,7 +52,7 @@ public class OrderStateDAO extends DBManager implements IDAO{
 				preStmt=(PreparedStatement) conn.prepareStatement(sqlQuery);
 				preStmt.setInt(1, orderId);
 				ResultSet res;
-				res = preStmt.executeQuery(sqlQuery);
+				res = preStmt.executeQuery();
 				
 				if(res.next()){
 					orderstate = new OrderStateBean();
@@ -82,12 +80,12 @@ public class OrderStateDAO extends DBManager implements IDAO{
 	
 	public ArrayList<Integer> GetOrderIdListClient(int num,int index, int clientId){
 		
-		ArrayList<Integer> orderIdList = null;
+		ArrayList<Integer> orderIdList = new ArrayList<Integer>();
 		//OrderStateBean orderState = null;
 		int orderId = 0;
 		
 		if(clientId!=0){
-			String sqlQuery = "Select * from Order_State where client_id=? and client_id<? desc limit ?;";
+			String sqlQuery = "Select * from (SELECT * from Order_State ORDER BY order_id DESC)table_a where client_id=? and order_id<? limit ?;";
 			//String sqlQuery = "Select * from Order_State where client_id="+clientId+";";
 			try{
 				preStmt=(PreparedStatement) conn.prepareStatement(sqlQuery);
@@ -95,11 +93,12 @@ public class OrderStateDAO extends DBManager implements IDAO{
 				preStmt.setInt(2, index);
 				preStmt.setInt(3,num);
 				ResultSet res;
-				res = preStmt.executeQuery(sqlQuery);
+				System.out.println(preStmt.asSql());
+				res = preStmt.executeQuery();
 				
 				while(res.next()){
 					orderId = res.getInt("order_id");
-					orderIdList = new ArrayList<Integer>();
+					
 					orderIdList.add(orderId);			
 				}
 				
@@ -115,12 +114,12 @@ public class OrderStateDAO extends DBManager implements IDAO{
 
     public ArrayList<Integer> GetOrderIdListDelivery(int num,int index,int deliveryId){
 		
-    	ArrayList<Integer> orderIdList = null;
+    	ArrayList<Integer> orderIdList = new ArrayList<Integer>(); 
 		//OrderStateBean orderState = null;
 		int orderId = 0;
 		
 		if(deliveryId!=0){
-			String sqlQuery = "Select * from Order_State where delivery_id=? and delivery_id<? desc limit ?;";
+			String sqlQuery = "Select * from (SELECT * from Order_State ORDER BY order_id DESC)table_a where delivery_id=? and order_id<? limit ?;";
 			//String sqlQuery = "Select * from Order_State where client_id="+clientId+";";
 			try{
 				preStmt=(PreparedStatement) conn.prepareStatement(sqlQuery);
@@ -128,11 +127,11 @@ public class OrderStateDAO extends DBManager implements IDAO{
 				preStmt.setInt(2, index);
 				preStmt.setInt(3,num);
 				ResultSet res;
-				res = preStmt.executeQuery(sqlQuery);
+				res = preStmt.executeQuery();
 				
 				while(res.next()){
 					orderId = res.getInt("order_id");
-					orderIdList = new ArrayList<Integer>();
+					
 					orderIdList.add(orderId);	
 				}
 			}catch(Exception e){
@@ -202,12 +201,13 @@ public class OrderStateDAO extends DBManager implements IDAO{
 					sqlUpdate += ",get_time='"+time+"' where order_id="+orderId+";";
 				}else if(state==3){
 					sqlUpdate += ",arrive_time='"+time+"' where order_id="+orderId+";";
-				}else if(state==4){
+				}else if(state==4||state==-1){
+					
 					sqlUpdate += ",over_time='"+time+"' where order_id="+orderId+";";
 				}else if(state==5){
 					sqlUpdate += " where order_id="+orderId+";";
 				}
-	
+				System.out.println(sqlUpdate);
 				if(sta.executeUpdate(sqlUpdate)!=0){
 	        		succ = true;
 	        	}
@@ -223,11 +223,11 @@ public class OrderStateDAO extends DBManager implements IDAO{
 	}
 	
     public ArrayList<Integer> GetOrders(int num,int index,int state){
-    	ArrayList<Integer> orderIdList = null;
+    	ArrayList<Integer> orderIdList = new ArrayList<Integer>();
     	int orderId = 0;
     	
     	if((num>0)&&(index>0)){
-    		String sqlQuery = "Select * from Order_State where state=? and order_id<? desc limit ?;";
+    		String sqlQuery = "Select * from (SELECT * from Order_State ORDER BY order_id DESC)table_a where state=? and order_id<? limit ?;";
     		try{
     			preStmt=(PreparedStatement) conn.prepareStatement(sqlQuery);
     			preStmt.setInt(1, state);
@@ -235,11 +235,11 @@ public class OrderStateDAO extends DBManager implements IDAO{
     			preStmt.setInt(3, num);
    			
 				ResultSet res;
-				res = preStmt.executeQuery(sqlQuery);
+				System.out.println(preStmt.asSql());
+				res = preStmt.executeQuery();
 				
 				while(res.next()){
 					orderId = res.getInt("order_id");
-					orderIdList = new ArrayList<Integer>();
 					orderIdList.add(orderId);
 				}
     			
@@ -251,26 +251,6 @@ public class OrderStateDAO extends DBManager implements IDAO{
     	}
 
     	return orderIdList;
-    }
-
-    public int getIdOrderNum(int id,String type){
-		int total = 0;
-		if(id>0){
-			String sqlQuery = "Select count(*) from Order_State where "+type+"_id ="+id+";";
-			try{				
-				ResultSet res;
-				res = sta.executeQuery(sqlQuery);
-				if(res.next()){
-					total = res.getInt(1);
-				}	
-				
-			}catch(Exception e){
-				e.printStackTrace();
-			}finally{
-				super.closeConnect();
-			}
-		}
-		return total;
     }
     
 }

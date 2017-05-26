@@ -7,10 +7,8 @@ import Bean.*;
 
 public class UserDAO extends DBManager implements IDAO{
 	
-	//private DBManager sql;
 	private int recordNum=0;
     
-
     public UserDAO(){
         super.openConnect();
     }
@@ -22,14 +20,14 @@ public class UserDAO extends DBManager implements IDAO{
 
         // »ñÈ¡Sql²éÑ¯Óï¾ä
         try{
-            String sqlGetNum="select COUNT(*) from User;";
+            String sqlGetNum="select COUNT(*) from Users;";
             ResultSet res;
             res = sta.executeQuery(sqlGetNum);
             if(res.next()){
-                this.recordNum=res.getInt(1);
+                this.recordNum=res.getInt(1)-1;
             }else
                 this.recordNum = 0;
-            String sqlInsert = "insert into User values(?,?,?,?,?,?,?,?,?);";
+            String sqlInsert = "insert into Users values(?,?,?,?,?,?,?,?,?);";
             preStmt=(PreparedStatement) conn.prepareStatement(sqlInsert);
             preStmt.setInt(1, recordNum+1);
             preStmt.setString(2, user.getName());
@@ -63,10 +61,10 @@ public class UserDAO extends DBManager implements IDAO{
     		String sqlUpdate;
     		if(column.equals("sex")||column.equals("age")){
     			value1 = Integer.parseInt(value);
-    			sqlUpdate = "update User set "+column+"="+value1+" where user_id="+userId+";";
+    			sqlUpdate = "update Users set "+column+"="+value1+" where user_id="+userId+";";
     		}
     		else
-    		 sqlUpdate = "update User set "+column+"='"+value+"' where user_id="+userId+";";
+    		 sqlUpdate = "update Users set "+column+"='"+value+"' where user_id="+userId+";";
     		
     		try{		 		 			 
 					
@@ -89,12 +87,12 @@ public class UserDAO extends DBManager implements IDAO{
     	UserBean user = null;
     	
     	if(phone!=null){
-    		String sqlQuery ="select * from User where phoneNum=?;";
+    		String sqlQuery ="select * from Users where phoneNum=?;";
     		try{
     			preStmt=(PreparedStatement) conn.prepareStatement(sqlQuery);
     			preStmt.setString(1, phone);
                 ResultSet res;
-                res = preStmt.executeQuery(sqlQuery);
+                res = preStmt.executeQuery();
                 
                 if(res.next()){
                 	user = new UserBean();
@@ -125,12 +123,13 @@ public class UserDAO extends DBManager implements IDAO{
     	UserBean user = null;
     	
     	if(email!=null){
-    		String sqlQuery ="select * from User where email=?;";
+    		String sqlQuery ="select * from Users where email = ?;";
     		try{
     			preStmt=(PreparedStatement) conn.prepareStatement(sqlQuery);
     			preStmt.setString(1, email);
                 ResultSet res;
-                res = preStmt.executeQuery(sqlQuery);
+               
+                res = preStmt.executeQuery();
                 if(res.next()){
                 	user = new UserBean();
                 	user.setUserId(res.getInt("user_id"));               	
@@ -159,12 +158,12 @@ public class UserDAO extends DBManager implements IDAO{
     	UserBean user = null;
     	
     	if(userId>0){
-    		String sqlQuery ="select * from User where user_id=?;";
+    		String sqlQuery ="select * from Users where user_id=?;";
     		try{
     			preStmt=(PreparedStatement) conn.prepareStatement(sqlQuery);
     			preStmt.setInt(1, userId);
                 ResultSet res;
-                res = preStmt.executeQuery(sqlQuery);
+                res = preStmt.executeQuery();
                 if(res.next()){
                 	user = new UserBean();
                 	user.setUserId(res.getInt("user_id"));               	

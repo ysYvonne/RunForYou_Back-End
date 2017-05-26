@@ -8,8 +8,6 @@ import Bean.*;
 
 public class CreditDAO extends DBManager implements IDAO {
 
-    private int recordNum=0;
-    private int pageNum=0;
     
 	public CreditDAO() {
 		// TODO Auto-generated constructor stub
@@ -28,7 +26,7 @@ public class CreditDAO extends DBManager implements IDAO {
         	preStmt.setInt(2, credit.getOrderNum());
         	preStmt.setInt(3, credit.getDeliveryNum());
         	preStmt.setInt(4, credit.getCredit());
-        	
+        	System.out.println(preStmt.asSql());
         	if(preStmt.executeUpdate()!=0){
         		succ = true;
         	}
@@ -50,7 +48,7 @@ public class CreditDAO extends DBManager implements IDAO {
 				preStmt = (PreparedStatement) conn.prepareStatement(sqlUpdate);		
 				preStmt.setInt(1, value);
 				preStmt.setInt(2, userId);
-				if(preStmt.executeUpdate(sqlUpdate)!=0){
+				if(preStmt.executeUpdate()!=0){
 	        		succ = true;
 	        	}
 	        	
@@ -73,7 +71,7 @@ public class CreditDAO extends DBManager implements IDAO {
 				preStmt = (PreparedStatement) conn.prepareStatement(sqlUpdate);		
 				preStmt.setInt(1, value);
 				preStmt.setInt(2, userId);
-				if(preStmt.executeUpdate(sqlUpdate)!=0){
+				if(preStmt.executeUpdate()!=0){
 	        		succ = true;
 	        	}
 	        	
@@ -95,7 +93,7 @@ public class CreditDAO extends DBManager implements IDAO {
 				preStmt = (PreparedStatement) conn.prepareStatement(sqlUpdate);		
 				preStmt.setFloat(1, value);
 				preStmt.setInt(2, userId);
-				if(preStmt.executeUpdate(sqlUpdate)!=0){
+				if(preStmt.executeUpdate()!=0){
 	        		succ = true;
 	        	}
 	        	
@@ -116,7 +114,7 @@ public class CreditDAO extends DBManager implements IDAO {
 	    			preStmt=(PreparedStatement) conn.prepareStatement(sqlQuery);
 	    			preStmt.setInt(1, userId);
 	                ResultSet res;
-	                res = preStmt.executeQuery(sqlQuery);
+	                res = preStmt.executeQuery();
 	                if(res.next()){
 	                	credit = new CreditBean();
 	                	credit.setUserId(res.getInt("user_id"));

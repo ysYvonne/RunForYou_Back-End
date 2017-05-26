@@ -1,14 +1,13 @@
 package db;
 
+import java.sql.ResultSet;
+
 import com.mysql.jdbc.PreparedStatement;
 
 import Bean.*;
 
 public class ReviewDAO extends DBManager implements IDAO {
 
-	//private DBManager sql;
-    private int recordNum=0;
-    private int pageNum=0;
     
 	public ReviewDAO() {
 		// TODO Auto-generated constructor stub
@@ -26,7 +25,7 @@ public class ReviewDAO extends DBManager implements IDAO {
         	preStmt.setInt(2, review.getReviewType());
         	preStmt.setString(3, review.getReviewTime());                                       
 
-        	if(preStmt.executeUpdate(sqlInsert)!=0){
+        	if(preStmt.executeUpdate()!=0){
         		succ = true;
         	}
 
@@ -38,4 +37,29 @@ public class ReviewDAO extends DBManager implements IDAO {
 		return succ;
 	}
 
+	public IEntity GetOneEntity(int orderId){
+		ReviewBean review = null;
+		
+		if(orderId>0){
+			String sqlQuery = "Select * form Order_Review where order_id = ?";
+			try{
+				preStmt=(PreparedStatement) conn.prepareStatement(sqlQuery);
+    			preStmt.setInt(1, orderId);
+                ResultSet res;;
+                res = preStmt.executeQuery();
+                if(res.next()){
+                	review = new ReviewBean();
+                	review.setOrderId(res.getInt("order_id"));
+                	review.setReviewTime(res.getString("review_time"));
+                	review.setReviewType(res.getInt("review_type"));
+                }
+			}catch(Exception e){
+				e.printStackTrace();
+			}finally {
+    			super.closeConnect();
+    		}
+		}
+		return review;
+		
+	}
 }
