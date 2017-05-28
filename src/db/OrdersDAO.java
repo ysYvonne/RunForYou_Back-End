@@ -10,10 +10,10 @@ public class OrdersDAO extends DBManager implements IDAO{
     private int recordNum=0;
     
     public OrdersDAO(){
-        super.openConnect();
     }
 
 	public int AddEntity(IEntity entity) {
+		 super.openConnect();
 		// TODO Auto-generated method stub
 		boolean succ=false;
 		OrdersBean order=(OrdersBean)entity;
@@ -55,6 +55,7 @@ public class OrdersDAO extends DBManager implements IDAO{
 	} 
 
 	public IEntity GetOneEntity(int orderId){
+		 super.openConnect();
 		OrdersBean order = null;
 		
 		if(orderId!=0){

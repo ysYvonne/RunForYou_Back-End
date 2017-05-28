@@ -10,11 +10,11 @@ public class UserDAO extends DBManager implements IDAO{
 	private int recordNum=0;
     
     public UserDAO(){
-        super.openConnect();
+        
     }
     
     public boolean AddEntity(IEntity entity) {
-
+    	super.openConnect();
         boolean succ=false;
         UserBean user=(UserBean)entity;
 
@@ -54,6 +54,7 @@ public class UserDAO extends DBManager implements IDAO{
     }
 
     public boolean UpdateEntity(int userId,String column,String value){
+    	super.openConnect();
     	boolean succ = false;
     	
     	if(userId!=0&&column!=null&&value!=null){
@@ -83,6 +84,7 @@ public class UserDAO extends DBManager implements IDAO{
     }
     
     public IEntity GetOneEntityPhone(String phone){
+    	super.openConnect();
     	  	
     	UserBean user = null;
     	
@@ -119,6 +121,7 @@ public class UserDAO extends DBManager implements IDAO{
     }
     
     public IEntity GetOneEntityEmail(String email){
+    	super.openConnect();
 	  	
     	UserBean user = null;
     	
@@ -154,7 +157,7 @@ public class UserDAO extends DBManager implements IDAO{
     }
 
     public IEntity GetOneEntityId(int userId){
-    	
+    	super.openConnect();
     	UserBean user = null;
     	
     	if(userId>0){

@@ -10,10 +10,10 @@ import Bean.*;
 public class OrderStateDAO extends DBManager implements IDAO{
     
     public OrderStateDAO(){
-    	super.openConnect();
     }
 
 	public boolean AddEntity(IEntity entity) {
+		 super.openConnect();
 		// TODO Auto-generated method stub
         boolean succ=false;
         OrderStateBean orderState=(OrderStateBean)entity;
@@ -44,6 +44,7 @@ public class OrderStateDAO extends DBManager implements IDAO{
 	}
 
 	public IEntity GetOneEntity(int orderId){
+		 super.openConnect();
 		OrderStateBean orderstate = null;
 		
 		if(orderId!=0){
@@ -79,7 +80,7 @@ public class OrderStateDAO extends DBManager implements IDAO{
 	}
 	
 	public ArrayList<Integer> GetOrderIdListClient(int num,int index, int clientId){
-		
+		 super.openConnect();
 		ArrayList<Integer> orderIdList = new ArrayList<Integer>();
 		//OrderStateBean orderState = null;
 		int orderId = 0;
@@ -113,7 +114,7 @@ public class OrderStateDAO extends DBManager implements IDAO{
 	}
 
     public ArrayList<Integer> GetOrderIdListDelivery(int num,int index,int deliveryId){
-		
+    	 super.openConnect();
     	ArrayList<Integer> orderIdList = new ArrayList<Integer>(); 
 		//OrderStateBean orderState = null;
 		int orderId = 0;
@@ -145,7 +146,7 @@ public class OrderStateDAO extends DBManager implements IDAO{
 	}
 
 	public int getEntityNumber(){
-		
+		 super.openConnect();
 		int total = 0;
 		try{
 			String sqlQuery = "Select count(*) from Order_State;";
@@ -167,6 +168,7 @@ public class OrderStateDAO extends DBManager implements IDAO{
 	}
 	
 	public boolean acceptOrder(int orderId,int userId){
+		 super.openConnect();
 		boolean succ=false;
 		
 		if(orderId>0){
@@ -190,6 +192,7 @@ public class OrderStateDAO extends DBManager implements IDAO{
 	}
 	
 	public boolean UpdateState(int orderId,int state,String time){
+		 super.openConnect();
 		boolean succ=false;
 		 
 		if(orderId>0){
@@ -223,6 +226,7 @@ public class OrderStateDAO extends DBManager implements IDAO{
 	}
 	
     public ArrayList<Integer> GetOrders(int num,int index,int state){
+    	 super.openConnect();
     	ArrayList<Integer> orderIdList = new ArrayList<Integer>();
     	int orderId = 0;
     	

@@ -11,21 +11,21 @@ public class OrderService {
 	private OrdersDAO ordersDao;
 	private OrderStateDAO orderStateDao;
 	
+	public OrderService(){
+		ordersDao = new OrdersDAO();
+		orderStateDao = new OrderStateDAO();
+	}
 
 	public ArrayList<LittleOrderBean> loadOrders(){
-		orderStateDao = new OrderStateDAO();
 		int totalnum = orderStateDao.getEntityNumber();
-		
-		orderStateDao = new OrderStateDAO();
+
 		ArrayList<Integer> orderIdList;
 		orderIdList = orderStateDao.GetOrders(15, totalnum+1, 0);
 		ArrayList<LittleOrderBean> orderList = new ArrayList<LittleOrderBean>();
 		for(int i = 0;i<orderIdList.size();i++)
 		{
 			System.out.println(orderIdList.size()+"   "+i);
-			ordersDao = new OrdersDAO();
 			OrdersBean order = (OrdersBean)ordersDao.GetOneEntity(orderIdList.get(i));
-			orderStateDao = new OrderStateDAO();
 			OrderStateBean orderState = (OrderStateBean)orderStateDao.GetOneEntity(orderIdList.get(i));
 			LittleOrderBean littleOrder = new LittleOrderBean();
 			littleOrder.setOrderId(order.getOrderId());
@@ -40,14 +40,11 @@ public class OrderService {
 	}
 
 	public  ArrayList<LittleOrderBean> loadMoreOrders(int index){
-		orderStateDao = new OrderStateDAO();
 		ArrayList<Integer> orderIdList = orderStateDao.GetOrders(15, index, 0);
 		ArrayList<LittleOrderBean> orderList = new ArrayList<LittleOrderBean>();
 		for(int i = 0;i<orderIdList.size();i++)
 		{
-			ordersDao = new OrdersDAO();
 			OrdersBean order = (OrdersBean)ordersDao.GetOneEntity(orderIdList.get(i));
-			orderStateDao = new OrderStateDAO();
 			OrderStateBean orderState = (OrderStateBean)orderStateDao.GetOneEntity(orderIdList.get(i));
 			LittleOrderBean littleOrder = new LittleOrderBean();
 			littleOrder.setOrderId(order.getOrderId());
@@ -65,7 +62,6 @@ public class OrderService {
 		boolean succ1 = false;
 		boolean succ2 = false;
 		
-		ordersDao = new OrdersDAO();
 		int order_id = ordersDao.AddEntity(order);
 		
 		if(order_id > 0)
@@ -78,7 +74,6 @@ public class OrderService {
 		orderState.setState(0);
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		orderState.setStartTime(df.format(new Date()));
-		orderStateDao = new OrderStateDAO();
 		succ2 = orderStateDao.AddEntity(orderState);
 		
 		boolean succ3 = false;
@@ -93,12 +88,12 @@ public class OrderService {
 		return false;
 	}
 	public OrdersBean getOrder(int orderId){
-		ordersDao = new OrdersDAO();
+
 		return (OrdersBean)ordersDao.GetOneEntity(orderId);
 	}
 	
 	public OrderStateBean getOrderState(int orderId){
-		orderStateDao = new OrderStateDAO();
+
 		return (OrderStateBean)orderStateDao.GetOneEntity(orderId);
 	}
 	
@@ -108,22 +103,22 @@ public class OrderService {
 	}
 	public boolean acceptOrder(int userId,int orderId){
 		boolean succ = false;
-		orderStateDao = new OrderStateDAO();
+
 		succ = orderStateDao.acceptOrder(orderId, userId);
 		return succ;
 	}
 	public ArrayList<LittleOrderBean> loadMyOrders(int userId){
-		orderStateDao = new OrderStateDAO();
+
 		int totalnum = orderStateDao.getEntityNumber();
 		System.out.println(totalnum);
-		orderStateDao = new OrderStateDAO();
+
 		ArrayList<Integer> orderIdList = orderStateDao.GetOrderIdListClient(15, totalnum+1, userId);
 		ArrayList<LittleOrderBean> orderList = new ArrayList<LittleOrderBean>();
 		for(int i = 0;i<orderIdList.size();i++)
 		{
-			ordersDao = new OrdersDAO();
+	
 			OrdersBean order = (OrdersBean)ordersDao.GetOneEntity(orderIdList.get(i));
-			orderStateDao = new OrderStateDAO();
+
 			OrderStateBean orderState = (OrderStateBean)orderStateDao.GetOneEntity(orderIdList.get(i));
 			LittleOrderBean littleOrder = new LittleOrderBean();
 			littleOrder.setOrderId(order.getOrderId());
@@ -138,14 +133,13 @@ public class OrderService {
 	}
 	public  ArrayList<LittleOrderBean> loadMoreMyOrders(int index,int userId){
 
-		orderStateDao = new OrderStateDAO();
+
 		ArrayList<Integer> orderIdList = orderStateDao.GetOrderIdListClient(15, index, userId);
 		ArrayList<LittleOrderBean> orderList = new ArrayList<LittleOrderBean>();
 		for(int i = 0;i<orderIdList.size();i++)
 		{
-			ordersDao = new OrdersDAO();
 			OrdersBean order = (OrdersBean)ordersDao.GetOneEntity(orderIdList.get(i));
-			orderStateDao = new OrderStateDAO();
+
 			OrderStateBean orderState = (OrderStateBean)orderStateDao.GetOneEntity(orderIdList.get(i));
 			LittleOrderBean littleOrder = new LittleOrderBean();
 			littleOrder.setOrderId(order.getOrderId());
@@ -159,16 +153,16 @@ public class OrderService {
 		return orderList;
 	}
 	public ArrayList<LittleOrderBean> loadMyDeliveryOrders(int userId){
-		orderStateDao = new OrderStateDAO();
+
 		int totalnum = orderStateDao.getEntityNumber();
-		orderStateDao = new OrderStateDAO();
+
 		ArrayList<Integer> orderIdList = orderStateDao.GetOrderIdListDelivery(15, totalnum+1, userId);
 		ArrayList<LittleOrderBean> orderList = new ArrayList<LittleOrderBean>();
 		for(int i = 0;i<orderIdList.size();i++)
 		{
-			ordersDao = new OrdersDAO();
+
 			OrdersBean order = (OrdersBean)ordersDao.GetOneEntity(orderIdList.get(i));
-			orderStateDao = new OrderStateDAO();
+
 			OrderStateBean orderState = (OrderStateBean)orderStateDao.GetOneEntity(orderIdList.get(i));
 			LittleOrderBean littleOrder = new LittleOrderBean();
 			littleOrder.setOrderId(order.getOrderId());
@@ -183,14 +177,14 @@ public class OrderService {
 	}
 	public  ArrayList<LittleOrderBean> loadMoreMyDeliveryOrders(int index,int userId){
 
-		orderStateDao = new OrderStateDAO();
+
 		ArrayList<Integer> orderIdList = orderStateDao.GetOrderIdListDelivery(15, index, userId);
 		ArrayList<LittleOrderBean> orderList = new ArrayList<LittleOrderBean>();
 		for(int i = 0;i<orderIdList.size();i++)
 		{
-			ordersDao = new OrdersDAO();
+
 			OrdersBean order = (OrdersBean)ordersDao.GetOneEntity(orderIdList.get(i));
-			orderStateDao = new OrderStateDAO();
+
 			OrderStateBean orderState = (OrderStateBean)orderStateDao.GetOneEntity(orderIdList.get(i));
 			LittleOrderBean littleOrder = new LittleOrderBean();
 			littleOrder.setOrderId(order.getOrderId());
@@ -208,13 +202,13 @@ public class OrderService {
 		
 		boolean succ = false;
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		orderStateDao = new OrderStateDAO();
+
 		succ = orderStateDao.UpdateState(orderId, state, df.format(new Date()));
 		
 		if(state == 4){//当订单完成时 根据积分订单加分
-			ordersDao = new OrdersDAO();
+
 			OrdersBean order = (OrdersBean)ordersDao.GetOneEntity(orderId);
-			orderStateDao = new OrderStateDAO();
+
 			OrderStateBean orderState = (OrderStateBean)orderStateDao.GetOneEntity(orderId);
 			CreditDAO creditDao = new CreditDAO();
 			if(order.getOrderType() == 1)
@@ -226,9 +220,9 @@ public class OrderService {
 		}
 		if(state == -1){//当订单取消时 根据积分订单返回积分
 			
-			ordersDao = new OrdersDAO();
+
 			OrdersBean order = (OrdersBean)ordersDao.GetOneEntity(orderId);
-			orderStateDao = new OrderStateDAO();
+
 			OrderStateBean orderState = (OrderStateBean)orderStateDao.GetOneEntity(orderId);
 			CreditDAO creditDao = new CreditDAO();
 			if(order.getOrderType() == 1){
@@ -240,7 +234,7 @@ public class OrderService {
 	}
 	public boolean placeReview(int orderId,int reviewType){
 		boolean succ = false;
-		orderStateDao = new OrderStateDAO();
+
 		succ = orderStateDao.UpdateState(orderId, 5, null);//设置状态
 		//插入review
 		ReviewBean review = new ReviewBean();
@@ -252,7 +246,7 @@ public class OrderService {
 		reviewDao.AddEntity(review);
 		//根据评价等级加分
 		CreditDAO creditDao = new CreditDAO();
-		orderStateDao = new OrderStateDAO();
+
 		OrderStateBean orderstate = (OrderStateBean)orderStateDao.GetOneEntity(orderId);
 		if(reviewType<=2)
 			succ = creditDao.UpdateEntityCredit(orderstate.getDeliveryId(), 1);

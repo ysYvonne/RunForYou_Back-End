@@ -11,10 +11,11 @@ public class OpinionDAO extends DBManager implements IDAO {
     
 	public OpinionDAO() {
 		// TODO Auto-generated constructor stub
-        super.openConnect();
+        
 	}
 
 	public boolean AddEntity(IEntity entity) {
+		super.openConnect();
 		// TODO Auto-generated method stub
         boolean succ=false;
         OpinionBean opinion = (OpinionBean)entity;
@@ -38,6 +39,7 @@ public class OpinionDAO extends DBManager implements IDAO {
 	}
 
 	public IEntity GetOneEntity(int userId){
+		super.openConnect();
 		OpinionBean opinion = null;
 		
 		if(userId>0){

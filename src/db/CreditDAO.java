@@ -11,10 +11,11 @@ public class CreditDAO extends DBManager implements IDAO {
     
 	public CreditDAO() {
 		// TODO Auto-generated constructor stub
-		super.openConnect();
+
 	}
 
 	public boolean AddEntity(IEntity entity) {
+		 super.openConnect();
 		// TODO Auto-generated method stub
         boolean succ=false;
         CreditBean credit = (CreditBean)entity;      
@@ -40,6 +41,7 @@ public class CreditDAO extends DBManager implements IDAO {
 	}
 
 	public boolean UpdateEntityOrder(int userId,int value){
+		 super.openConnect();
 		boolean succ = false;
 		
 		if(userId>0){
@@ -62,7 +64,7 @@ public class CreditDAO extends DBManager implements IDAO {
 	}
 	
 	public boolean UpdateEntityDelivery(int userId,int value){
-		
+		 super.openConnect();
 		boolean succ = false;
 		
 		if(userId>0){
@@ -85,6 +87,7 @@ public class CreditDAO extends DBManager implements IDAO {
 	}
 	
 	public boolean UpdateEntityCredit(int userId,float value){
+		 super.openConnect();
 		boolean succ = false;
 		
 		if(userId>0){
@@ -107,6 +110,7 @@ public class CreditDAO extends DBManager implements IDAO {
 	}
 
 	public IEntity GetOneEntityId(int userId){
+		 super.openConnect();
 		  CreditBean credit = null;
 		  if(userId>0){
 			  String sqlQuery ="select * from Credit where user_id=?;";

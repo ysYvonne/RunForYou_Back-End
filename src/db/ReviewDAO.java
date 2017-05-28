@@ -11,10 +11,11 @@ public class ReviewDAO extends DBManager implements IDAO {
     
 	public ReviewDAO() {
 		// TODO Auto-generated constructor stub
-        super.openConnect();
+       
 	}
 
 	public boolean AddEntity(IEntity entity) {
+		 super.openConnect();
 		// TODO Auto-generated method stub
         boolean succ=false;
         ReviewBean review = (ReviewBean)entity;    
@@ -38,6 +39,7 @@ public class ReviewDAO extends DBManager implements IDAO {
 	}
 
 	public IEntity GetOneEntity(int orderId){
+		 super.openConnect();
 		ReviewBean review = null;
 		
 		if(orderId>0){
