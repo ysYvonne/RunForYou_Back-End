@@ -69,6 +69,8 @@ public class LoginServlet extends HttpServlet {
 			emailLogin();
 		}else if(type.equals("phoneLogin")){
 			phoneLogin();
+		}else if(type.equals("phoneExist")){
+			phoneExist();
 		}else if(type.equals("register")){
 			register();
 		}
@@ -97,20 +99,24 @@ public class LoginServlet extends HttpServlet {
 		
 	public void phoneLogin(){
 		String phoneNum = jsonObject.getString("phoneNum");
-		String password = jsonObject.getString("password");
 		
-		if((userBean=logService.AccountLogin(phoneNum, password)) != null){
-			jsonReply.put("code", SUCCESS);//登陆成功
-			jsonReply.put("user", userBean);
-		}else if(logService.PhoneExist(phoneNum) == null){
+		userBean=logService.PhoneExist(phoneNum);
+		jsonReply.put("code", SUCCESS);//登陆成功
+		jsonReply.put("user", userBean);
+	}
+		
+	public void phoneExist(){
+		String phoneNum = jsonObject.getString("phoneNum");
+		
+		if(logService.PhoneExist(phoneNum) == null){
 			jsonReply.put("code",CONFILICT);//手机号不存在
 			//jsonReply.put("user", null);
 		}else{
-			jsonReply.put("code", ERROR);//密码错误
+			jsonReply.put("code", SUCCESS);//验证成功
 			//jsonReply.put("user", null);
 		}
 	}
-		
+	
 	public void register(){
 		String email = jsonObject.getString("email");
         int user_id = Integer.parseInt(jsonObject.getString("user_id"));//用户id

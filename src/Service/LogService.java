@@ -9,20 +9,15 @@ public class LogService {
 	public  LogService(){
 		userdao = new UserDAO();
 	}
-	public UserBean AccountLogin(String account,String password){
+	public UserBean AccountLogin(String email,String password){
 		UserBean user;
-		
-		if(account.indexOf("@") != -1){
-			user = (UserBean)userdao.GetOneEntityEmail(account);//取出user类
-		}else{
-			user = (UserBean)userdao.GetOneEntityPhone(account);//取出user类
-		}
-				
+		user = (UserBean)userdao.GetOneEntityEmail(email);//取出user类
+			
 		if(user == null){
 			return null;
 		}
 		else{
-			if(user.getPassword().equals(password) || (account.indexOf("@") == -1))
+			if(user.getPassword().equals(password))
 				return user;
 		}
 		return null;
