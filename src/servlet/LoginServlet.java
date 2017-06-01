@@ -79,8 +79,8 @@ public class LoginServlet extends HttpServlet {
 		pw.write(jsonReply.toString());
 		pw.flush();
 		pw.close();
-	}
-		
+	}	
+	
 	public void emailLogin(){
 		String email = jsonObject.getString("email");
 		String password = jsonObject.getString("password");
