@@ -10,11 +10,11 @@
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
   <servlet>
-  <servlet-name>TestLet</servlet-name>
-  <servlet-class>servlet.TestLet</servlet-class>
+    <servlet-name>TestLet</servlet-name>
+    <servlet-class>servlet.TestLet</servlet-class>
   </servlet>
   <servlet-mapping>
-  <servlet-name>TestLet</servlet-name>
-  <url-pattern>/TestLet</url-pattern>
+    <servlet-name>TestLet</servlet-name>
+    <url-pattern>/TestLet</url-pattern>
   </servlet-mapping>
 </web-app>

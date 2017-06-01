@@ -1,5 +1,4 @@
 package db;
-import Bean.*;
 
 public interface IDAO {
 	//public boolean AddEntity(IEntity entity);
