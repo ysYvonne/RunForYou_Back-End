@@ -10,6 +10,8 @@ public class OrdersBean implements IEntity{
 	    private String order_item;//商品类型（简称）
 	    private String order_time;//订单持续时间
 	    private String order_describe;//订单描述
+	    private String contactName;
+	    private String contactPhone;
 
 	    public void setOrderId(int orderId){
 	        order_id = orderId;
@@ -38,6 +40,13 @@ public class OrdersBean implements IEntity{
 	    public void setOrderDescribe(String describe){
 	        order_describe = describe;
 	    }
+	    public void setContactName(String name){
+	        contactName = name;
+	    }
+	    public void setContactPhone(String phone){
+	        contactPhone = phone;
+	    }
+
 
 	    public int getOrderId(){
 	       return order_id;
@@ -66,4 +75,12 @@ public class OrdersBean implements IEntity{
 	    public String getOrderDescribe() {
 	        return order_describe;
 	    }
+	    public String getContactName(){
+	        return contactName;
+	    }
+	    public String getContactPhone(){
+	        return contactPhone;
+	    }
+
+
 }

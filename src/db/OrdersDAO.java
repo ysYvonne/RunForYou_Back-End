@@ -27,7 +27,7 @@ public class OrdersDAO extends DBManager implements IDAO{
 			}else
 				this.recordNum = 0;
 			
-			String sqlInsert = "insert into Orders values(?,?,?,?,?,?,?,?,?);";
+			String sqlInsert = "insert into Orders values(?,?,?,?,?,?,?,?,?,?,?);";
             preStmt=(PreparedStatement) conn.prepareStatement(sqlInsert);
             preStmt.setInt(1, recordNum+1);
             preStmt.setInt(2, order.getOrderType());
@@ -38,6 +38,8 @@ public class OrdersDAO extends DBManager implements IDAO{
             preStmt.setString(7, order.getOrderDescribe());
             preStmt.setFloat(8, order.getOrderReward());
             preStmt.setFloat(9, order.getOrderPredict());
+            preStmt.setString(10, order.getContactName());
+            preStmt.setString(11, order.getContactPhone());
 
 			if(preStmt.executeUpdate()!=0){
 				succ = true;
@@ -77,6 +79,8 @@ public class OrdersDAO extends DBManager implements IDAO{
 					order.setOrderDescribe(res.getString("order_describe"));
 					order.setOrderReward(res.getFloat("order_reward"));
 					order.setOrderPredict(res.getFloat("order_predict"));
+					order.setContactName(res.getString("contactName"));
+					order.setContactPhone(res.getString("contactPhone"));
 				}
 			}catch(Exception e){
 				e.printStackTrace();

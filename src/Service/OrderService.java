@@ -101,6 +101,7 @@ public class OrderService {
 		ReviewDAO reviewDao= new ReviewDAO();
 		return ((ReviewBean)reviewDao.GetOneEntity(orderId)).getReviewType();
 	}
+	
 	public boolean acceptOrder(int userId,int orderId){
 		boolean succ = false;
 
@@ -242,6 +243,7 @@ public class OrderService {
 		review.setReviewType(reviewType);
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		review.setReviewTime(df.format(new Date()));
+		
 		ReviewDAO reviewDao = new ReviewDAO();
 		reviewDao.AddEntity(review);
 		//根据评价等级加分
