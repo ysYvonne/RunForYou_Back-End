@@ -113,7 +113,7 @@ public class LoginServlet extends HttpServlet {
 		
 	public void register(){
 		String email = jsonObject.getString("email");
-        int userId = Integer.parseInt(jsonObject.getString("userId"));//用户id
+        int user_id = Integer.parseInt(jsonObject.getString("user_id"));//用户id
         String name = jsonObject.getString("name");//真实姓名
         int sex = Integer.parseInt(jsonObject.getString("sex"));//姓名，记1为男，2为女，0为未设置
         int age = Integer.parseInt(jsonObject.getString("age"));//年龄，记-1为未设置
@@ -128,7 +128,7 @@ public class LoginServlet extends HttpServlet {
          }else { // 注册成功
         	userBean = new UserBean();
         	userBean.setEmail(email);
-        	userBean.setUserId(userId);
+        	userBean.setUserId(user_id);
         	userBean.setName(name);
         	userBean.setNickname(nickname);
         	userBean.setPhoneNum(phoneNum);
