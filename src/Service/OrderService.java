@@ -34,6 +34,8 @@ public class OrderService {
 			littleOrder.setOrderAddress(order.getOrderAddress());
 			littleOrder.setStartTime(orderState.getStartTime());
 			littleOrder.setState(orderState.getState());
+			littleOrder.setShop(order.getOrderDestination());
+			littleOrder.setType(order.getOrderType());
 			orderList.add(littleOrder);
 		}
 		return orderList;
@@ -53,6 +55,8 @@ public class OrderService {
 			littleOrder.setOrderAddress(order.getOrderAddress());
 			littleOrder.setStartTime(orderState.getStartTime());
 			littleOrder.setState(orderState.getState());
+			littleOrder.setShop(order.getOrderDestination());
+			littleOrder.setType(order.getOrderType());
 			orderList.add(littleOrder);
 		}
 		return orderList;
@@ -128,6 +132,8 @@ public class OrderService {
 			littleOrder.setOrderAddress(order.getOrderAddress());
 			littleOrder.setStartTime(orderState.getStartTime());
 			littleOrder.setState(orderState.getState());
+			littleOrder.setShop(order.getOrderDestination());
+			littleOrder.setType(order.getOrderType());
 			orderList.add(littleOrder);
 		}
 		return orderList;
@@ -149,6 +155,8 @@ public class OrderService {
 			littleOrder.setOrderAddress(order.getOrderAddress());
 			littleOrder.setStartTime(orderState.getStartTime());
 			littleOrder.setState(orderState.getState());
+			littleOrder.setShop(order.getOrderDestination());
+			littleOrder.setType(order.getOrderType());
 			orderList.add(littleOrder);
 		}
 		return orderList;
@@ -172,6 +180,8 @@ public class OrderService {
 			littleOrder.setOrderAddress(order.getOrderAddress());
 			littleOrder.setStartTime(orderState.getStartTime());
 			littleOrder.setState(orderState.getState());
+			littleOrder.setShop(order.getOrderDestination());
+			littleOrder.setType(order.getOrderType());
 			orderList.add(littleOrder);
 		}
 		return orderList;
@@ -194,6 +204,8 @@ public class OrderService {
 			littleOrder.setOrderAddress(order.getOrderAddress());
 			littleOrder.setStartTime(orderState.getStartTime());
 			littleOrder.setState(orderState.getState());
+			littleOrder.setShop(order.getOrderDestination());
+			littleOrder.setType(order.getOrderType());
 			orderList.add(littleOrder);
 		}
 		return orderList;
