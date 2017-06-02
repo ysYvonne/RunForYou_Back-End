@@ -123,14 +123,14 @@ public class LoginServlet extends HttpServlet {
 	
 	private void register(){
 		String email = jsonObject.getString("email");
-        int user_id = Integer.parseInt(jsonObject.getString("user_id"));//用户id
+        //int user_id = Integer.parseInt(jsonObject.getString("userId"));//用户id
         String name = jsonObject.getString("name");//真实姓名
-        int sex = Integer.parseInt(jsonObject.getString("sex"));//姓名，记1为男，2为女，0为未设置
-        int age = Integer.parseInt(jsonObject.getString("age"));//年龄，记-1为未设置
-        String nickname = jsonObject.getString("nickname");//昵称
+        //int sex = Integer.parseInt(jsonObject.getString("sex"));//姓名，记1为男，2为女，0为未设置
+        //int age = Integer.parseInt(jsonObject.getString("age"));//年龄，记-1为未设置
+        //String nickname = jsonObject.getString("nickname");//昵称
         String phoneNum = jsonObject.getString("phoneNum");//电话
         String school = jsonObject.getString("school");//学校
-        String password = jsonObject.getString("password");//密码
+        //String password = jsonObject.getString("password");//密码
         
     	if ((userBean=logService.EmailExist(email)) != null) { // 账号存在  
     		jsonReply.put("code", CONFILICT);//邮件已注册
@@ -138,12 +138,16 @@ public class LoginServlet extends HttpServlet {
          }else { // 注册成功
         	userBean = new UserBean();
         	userBean.setEmail(email);
-        	userBean.setUserId(user_id);
+        	//userBean.setUserId(user_id);
         	userBean.setName(name);
-        	userBean.setNickname(nickname);
+        	userBean.setNickname(name.substring(0, 1)+"同学");
         	userBean.setPhoneNum(phoneNum);
         	userBean.setSchool(school);
-        	userBean.setPassword(password);
+        	
+        	userBean.setAge(-1);
+        	userBean.setPassword("");
+        	userBean.setSex(-1);
+        	
         	
         	if(logService.Register(userBean) != null){
         		jsonReply.put("code", SUCCESS);

@@ -79,7 +79,7 @@ public class InformationServlet extends HttpServlet {
 	}
 	
 	public void placeOpinion(){
-		int user_id = Integer.parseInt(jsonObject.getString("user_id"));//用户id
+		int user_id = Integer.parseInt(jsonObject.getString("userId"));//用户id
 		String content = jsonObject.getString("content");
 		
 		informationService.placeOpinion(user_id, content);
@@ -87,7 +87,7 @@ public class InformationServlet extends HttpServlet {
 	}
 	public void getCredit(){
 		
-		int user_id = Integer.parseInt(jsonObject.getString("user_id"));//用户id
+		int user_id = Integer.parseInt(jsonObject.getString("userId"));//用户id
 		
 		CreditBean credit = informationService.getCredit(user_id);
 		
@@ -95,7 +95,7 @@ public class InformationServlet extends HttpServlet {
 		
 	}
 	public void getUser(){
-		int user_id = Integer.parseInt(jsonObject.getString("user_id"));//用户id
+		int user_id = Integer.parseInt(jsonObject.getString("userId"));//用户id
 		
 		userBean = informationService.getUser(user_id);
 		
@@ -104,7 +104,7 @@ public class InformationServlet extends HttpServlet {
 	}
 	
 	public void updateInfomation(){
-		int user_id = Integer.parseInt(jsonObject.getString("user_id"));//用户id
+		int user_id = Integer.parseInt(jsonObject.getString("userId"));//用户id
 		String column = jsonObject.getString("column");
 		String value = jsonObject.getString("value");
 		
