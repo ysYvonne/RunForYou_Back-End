@@ -23,8 +23,8 @@ public class Test {
 //	            parameter.put("username", username.getText());
 //	            parameter.put("password", password.getText());
 	            parameter.put("type", "emailLogin");
-	            parameter.put("email", "123");
-	            parameter.put("password", "456");
+	            parameter.put("email", "1_i3456@bjtu.edu.cn");
+	            parameter.put("password", "123456");
 	        } catch (JSONException e) {
 	            e.printStackTrace();
 	        }

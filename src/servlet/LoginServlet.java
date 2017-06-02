@@ -30,7 +30,7 @@ public class LoginServlet extends HttpServlet {
 	private JSONObject jsonObject;
 	private LogService logService;
 	private UserBean userBean;
-	private JSONObject jsonReply = new JSONObject();//封装服务器返回的JSON对象
+	private JSONObject jsonReply;//封装服务器返回的JSON对象
 
 	
     public LoginServlet() {
@@ -60,9 +60,11 @@ public class LoginServlet extends HttpServlet {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		jsonObject = JSONObject.fromObject(result);
-		String type = jsonObject.getString("type");
+		jsonReply = new JSONObject();
 		logService = new LogService(); //新建Service实例
+		
+		jsonObject = JSONObject.fromObject(result);
+		String type = jsonObject.getString("type");	
 		PrintWriter pw = response.getWriter();
 		
 		if(type.equals("emailLogin")){//邮件登录
@@ -79,9 +81,11 @@ public class LoginServlet extends HttpServlet {
 		pw.write(jsonReply.toString());
 		pw.flush();
 		pw.close();
+		jsonObject.clear();
+		jsonReply.clear();
 	}	
 	
-	public void emailLogin(){
+	private void emailLogin(){
 		String email = jsonObject.getString("email");
 		String password = jsonObject.getString("password");
 		
@@ -90,14 +94,14 @@ public class LoginServlet extends HttpServlet {
 			jsonReply.put("user", userBean);
 		}else if(logService.EmailExist(email) == null){
 			jsonReply.put("code",CONFILICT);//邮件名不存在
-			//jsonReply.put("user", null);
+			jsonReply.put("user", null);
 		}else{
 			jsonReply.put("code", ERROR);//密码错误
-			//jsonReply.put("user", null);
+			jsonReply.put("user", null);
 		}
 	}
 		
-	public void phoneLogin(){
+	private void phoneLogin(){
 		String phoneNum = jsonObject.getString("phoneNum");
 		
 		userBean=logService.PhoneExist(phoneNum);
@@ -105,19 +109,19 @@ public class LoginServlet extends HttpServlet {
 		jsonReply.put("user", userBean);
 	}
 		
-	public void phoneExist(){
+	private void phoneExist(){
 		String phoneNum = jsonObject.getString("phoneNum");
 		
 		if(logService.PhoneExist(phoneNum) == null){
 			jsonReply.put("code",CONFILICT);//手机号不存在
-			//jsonReply.put("user", null);
+			jsonReply.put("user", null);
 		}else{
 			jsonReply.put("code", SUCCESS);//验证成功
-			//jsonReply.put("user", null);
+			jsonReply.put("user", null);
 		}
 	}
 	
-	public void register(){
+	private void register(){
 		String email = jsonObject.getString("email");
         int user_id = Integer.parseInt(jsonObject.getString("user_id"));//用户id
         String name = jsonObject.getString("name");//真实姓名
