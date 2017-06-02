@@ -35,4 +35,11 @@ public class InformationService {
 		succ = opinionDao.AddEntity(opinion);
 		return succ;
 	}
+	
+	public CreditBean getCredit(int userId){
+		CreditDAO creditDao = new CreditDAO();
+		CreditBean credit = (CreditBean) creditDao.GetOneEntityId(userId);
+		
+		return credit;
+	}
 }

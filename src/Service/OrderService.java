@@ -86,7 +86,7 @@ public class OrderService {
 			creditDao = new CreditDAO();
 			succ3 = creditDao.UpdateEntityCredit(userId, order.getOrderReward()*-1);
 		}
-		if(succ1&&succ2)
+		if(succ1&&succ2&&succ3)
 			return true;
 		
 		return false;

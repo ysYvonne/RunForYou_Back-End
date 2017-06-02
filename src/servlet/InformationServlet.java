@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import Bean.CreditBean;
 import Bean.UserBean;
 import Service.InformationService;
 import Service.LogService;
@@ -67,6 +68,8 @@ public class InformationServlet extends HttpServlet {
 			getUser();
 		}else if(type.equals("updateInfomation")){
 			updateInfomation();
+		}else if(type.equals("getCredit")){
+			getCredit();
 		}
 		
 		System.out.println(jsonReply);
@@ -82,7 +85,15 @@ public class InformationServlet extends HttpServlet {
 		informationService.placeOpinion(user_id, content);
 		
 	}
-	
+	public void getCredit(){
+		
+		int user_id = Integer.parseInt(jsonObject.getString("user_id"));//用户id
+		
+		CreditBean credit = informationService.getCredit(user_id);
+		
+		jsonReply.put("credit", credit);
+		
+	}
 	public void getUser(){
 		int user_id = Integer.parseInt(jsonObject.getString("user_id"));//用户id
 		
