@@ -158,8 +158,8 @@ public class OrderServlet extends HttpServlet {
 		order.setOrderDestination(jsonObject.getString("shop"));
 		order.setOrderAddress(jsonObject.getString("des"));
 		order.setOrderTime(jsonObject.getString("time"));
-		order.setOrderPredict((float) jsonObject.get("money"));
-		order.setOrderReward((float) jsonObject.get("deliver"));
+		order.setOrderPredict((float)jsonObject.getDouble("money"));
+		order.setOrderReward((float)jsonObject.getDouble("deliver"));
 		order.setOrderType(jsonObject.getInt("deliverMethod"));
 
 		int userId = jsonObject.getInt("userId");

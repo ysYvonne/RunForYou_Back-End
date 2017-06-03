@@ -82,7 +82,13 @@ public class InformationServlet extends HttpServlet {
 		int user_id = Integer.parseInt(jsonObject.getString("userId"));//用户id
 		String content = jsonObject.getString("content");
 		
-		informationService.placeOpinion(user_id, content);
+		boolean succ = informationService.placeOpinion(user_id, content);
+		
+		if(succ){
+			jsonReply.put("code", SUCCESS);
+		}else{
+			jsonReply.put("code", ERROR);//修改不成功
+		}
 		
 	}
 	public void getCredit(){
@@ -90,8 +96,14 @@ public class InformationServlet extends HttpServlet {
 		int user_id = Integer.parseInt(jsonObject.getString("userId"));//用户id
 		
 		CreditBean credit = informationService.getCredit(user_id);
+		if(credit != null){
+			jsonReply.put("code", SUCCESS);
+			jsonReply.put("credit", credit);
+		}else{
+			jsonReply.put("code", ERROR);
+			jsonReply.put("credit", null);
+		}
 		
-		jsonReply.put("credit", credit);
 		
 	}
 	public void getUser(){
@@ -99,7 +111,15 @@ public class InformationServlet extends HttpServlet {
 		
 		userBean = informationService.getUser(user_id);
 		
-		jsonReply.put("user", userBean);
+		
+		
+		if(userBean != null){
+			jsonReply.put("code", SUCCESS);
+			jsonReply.put("user", userBean);
+		}else{
+			jsonReply.put("code", ERROR);
+			jsonReply.put("user", null);
+		}
 		
 	}
 	

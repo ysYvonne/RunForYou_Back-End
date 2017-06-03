@@ -35,6 +35,7 @@ public class TestLet extends HttpServlet {
     	order.setOrderTime("30分钟");
     	*/
     	UserBean user = new UserBean();
+    	/*
     	user.setAge(18);
     	user.setEmail("14301063@bjtu.edu.cn");
     	user.setName("何本伟");
@@ -43,13 +44,22 @@ public class TestLet extends HttpServlet {
     	user.setPhoneNum("13121956192");
     	user.setSchool("北京交通大学");
     	user.setSex(2);
+    	*/
+    	user.setEmail("987654321@qq.com");
+    	user.setName("123465");
+    	user.setNickname("123465".substring(0, 1)+"同学");
+    	user.setPhoneNum("1314121684");
+    	user.setSchool("bjtu");
     	
+    	user.setAge(-1);
+    	user.setPassword("");
+    	user.setSex(-1);
     	
     	//UserBean user1 = informationService.getUser(2);
     	
     	//OrdersBean order1 = orderService.getOrder(1);
     	//OrderStateBean orderState = orderService.getOrderState(1);
-    	UserBean succ = logService.Register(user);
+    	UserBean succ = logService.PhoneExist("123456789");
     	//ArrayList<LittleOrderBean> succ = orderService.updateState(1, 2);
     	
         try {
