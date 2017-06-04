@@ -80,13 +80,7 @@ public class OrderService {
 		orderState.setStartTime(df.format(new Date()));
 		succ2 = orderStateDao.AddEntity(orderState);
 		
-		boolean succ3 = false;
-		CreditDAO creditDao = new CreditDAO();
-		if(order.getOrderType() == 1&&((CreditBean)creditDao.GetOneEntityId(userId)).getCredit()-order.getOrderReward()>=0){
-			creditDao = new CreditDAO();
-			succ3 = creditDao.UpdateEntityCredit(userId, order.getOrderReward()*-1);
-		}
-		if(succ1&&succ2&&succ3)
+		if(succ1&&succ2)
 			return true;
 		
 		return false;

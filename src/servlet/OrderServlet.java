@@ -158,9 +158,9 @@ public class OrderServlet extends HttpServlet {
 		order.setOrderDestination(jsonObject.getString("shop"));
 		order.setOrderAddress(jsonObject.getString("des"));
 		order.setOrderTime(jsonObject.getString("time"));
-		order.setOrderPredict((float)jsonObject.getDouble("money"));
-		order.setOrderReward((float)jsonObject.getDouble("deliver"));
-		order.setOrderType(jsonObject.getInt("deliverMethod"));
+		order.setOrderPredict(Float.parseFloat(jsonObject.getString("money")));
+		order.setOrderReward(Float.parseFloat(jsonObject.getString("deliver")));
+		order.setOrderType(Integer.parseInt(jsonObject.getString("deliverMethod")));
 
 		int userId = jsonObject.getInt("userId");
 
@@ -174,7 +174,7 @@ public class OrderServlet extends HttpServlet {
 	}
 
 	public void OrderInfo() {
-		int orderId = jsonObject.getInt("orderId");
+		int orderId = Integer.parseInt(jsonObject.getString("orderId"));
 
 		OrdersBean order = orderService.getOrder(orderId);
 		OrderStateBean orderState = orderService.getOrderState(orderId);
@@ -187,7 +187,7 @@ public class OrderServlet extends HttpServlet {
 	}
 
 	public void OrderReceive() {
-		int orderId = jsonObject.getInt("orderId");
+		int orderId = Integer.parseInt(jsonObject.getString("orderId"));
 		int userId = jsonObject.getInt("userId");
 		boolean succ = orderService.acceptOrder(userId, orderId);
 
@@ -198,7 +198,7 @@ public class OrderServlet extends HttpServlet {
 	}
 
 	public void OrderUpdate() {
-		int orderId = jsonObject.getInt("orderId");
+		int orderId = Integer.parseInt(jsonObject.getString("orderId"));
 		int state = jsonObject.getInt("state");
 
 		boolean succ = orderService.updateState(orderId, state);
@@ -210,7 +210,7 @@ public class OrderServlet extends HttpServlet {
 	}
 
 	public void OrderDrawback() {
-		int orderId = jsonObject.getInt("orderId");
+		int orderId = Integer.parseInt(jsonObject.getString("orderId"));
 
 		boolean succ = orderService.updateState(orderId, -1);
 
@@ -221,7 +221,7 @@ public class OrderServlet extends HttpServlet {
 	}
 
 	public void OrderFinish() {
-		int orderId = jsonObject.getInt("orderId");
+		int orderId = Integer.parseInt(jsonObject.getString("orderId"));
 
 		boolean succ = orderService.updateState(orderId, 4);
 
@@ -232,8 +232,8 @@ public class OrderServlet extends HttpServlet {
 	}
 
 	public void OrderJudge() {
-		int orderId = jsonObject.getInt("orderId");
-		int review = jsonObject.getInt("review");
+		int orderId = Integer.parseInt(jsonObject.getString("orderId"));
+		int review = Integer.parseInt(jsonObject.getString("review"));
 
 		boolean succ = orderService.placeReview(orderId, review);
 
