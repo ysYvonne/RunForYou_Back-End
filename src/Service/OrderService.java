@@ -97,7 +97,8 @@ public class OrderService {
 	
 	public int getReview(int orderId){
 		ReviewDAO reviewDao= new ReviewDAO();
-		return ((ReviewBean)reviewDao.GetOneEntity(orderId)).getReviewType();
+		ReviewBean review = (ReviewBean)reviewDao.GetOneEntity(orderId);
+		return review.getReviewType();
 	}
 	
 	public boolean acceptOrder(int userId,int orderId){

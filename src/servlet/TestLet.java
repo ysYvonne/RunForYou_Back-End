@@ -20,8 +20,8 @@ public class TestLet extends HttpServlet {
 	    response.setContentType("text/json");
     	
     	System.out.println("helloworld!");
-    	LogService logService = new LogService();
-        //OrderService orderService = new OrderService();
+    	//LogService logService = new LogService();
+        OrderService orderService = new OrderService();
     	//InformationService informationService = new InformationService();
     	/*
     	OrdersBean order = new OrdersBean();
@@ -45,6 +45,17 @@ public class TestLet extends HttpServlet {
     	user.setSchool("北京交通大学");
     	user.setSex(2);
     	*/
+    	
+    	int orderId = 20;
+    	int review = 0;
+
+		OrdersBean order = orderService.getOrder(orderId);
+		OrderStateBean orderState = orderService.getOrderState(orderId);
+		if (orderState.getState() == 5) {
+			 review = orderService.getReview(orderId);
+			 response.getWriter().println(order.getContactName());
+		}
+		/*
     	user.setEmail("987654321@qq.com");
     	user.setName("123465");
     	user.setNickname("123465".substring(0, 1)+"同学");
@@ -54,18 +65,18 @@ public class TestLet extends HttpServlet {
     	user.setAge(-1);
     	user.setPassword("");
     	user.setSex(-1);
-    	
+    	*/
     	//UserBean user1 = informationService.getUser(2);
     	
     	//OrdersBean order1 = orderService.getOrder(1);
-    	//OrderStateBean orderState = orderService.getOrderState(1);
-    	UserBean succ = logService.PhoneExist("123456789");
+    //	boolean succ = orderService.updateState(1, 2);
+    	//UserBean succ = logService.PhoneExist("123456789");
     	//ArrayList<LittleOrderBean> succ = orderService.updateState(1, 2);
     	
         try {
-        	if(succ!=null){
+        	if(order!=null){
         		//for(int i=0;i<succ.size();i++)
-        			response.getWriter().println(succ.getName());
+        			response.getWriter().println(review);
         			
         	}
         		//response.getWriter().println(succ);

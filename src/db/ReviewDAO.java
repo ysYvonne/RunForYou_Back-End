@@ -43,14 +43,15 @@ public class ReviewDAO extends DBManager implements IDAO {
 		ReviewBean review = null;
 		
 		if(orderId>0){
-			String sqlQuery = "Select * form Order_Review where order_id = ?";
+			String sqlQuery = "Select * from Order_Review where order_id = ?";
 			try{
 				preStmt=(PreparedStatement) conn.prepareStatement(sqlQuery);
     			preStmt.setInt(1, orderId);
-                ResultSet res;;
+                ResultSet res;
                 res = preStmt.executeQuery();
                 if(res.next()){
                 	review = new ReviewBean();
+                	review.setReviewId(res.getInt("review_id"));
                 	review.setOrderId(res.getInt("order_id"));
                 	review.setReviewTime(res.getString("review_time"));
                 	review.setReviewType(res.getInt("review_type"));
